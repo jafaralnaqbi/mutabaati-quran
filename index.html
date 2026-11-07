@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1f6b3f">
+<meta name="description" content="توثيق إنجاز الحفظ والمراجعة والتثبيت والتلاوة والاستماع والقراءة على شخص">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="متابعتي">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>متابعتي مع القرآن</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --g:#1f6b3f;--g2:#2a8150;--g3:#e2f0e6;--g4:#f0f7f2;
+  --bg:#edf1ee;--card:#fbfaf6;--soft:#f5f2ea;--line:#e5dfd3;
+  --ink:#1d2722;--muted:#69736d;
+  --red:#c62828;--redbg:#fde8e8;--blue:#1e63c6;--bluebg:#e3eefc;
+  --r:18px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{font-family:'Tajawal',system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.55;padding-bottom:calc(92px + env(safe-area-inset-bottom))}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none;padding:0}
+svg{flex:none}
+.app{max-width:580px;margin:0 auto;padding:0 12px}
+.hidden{display:none!important}
+
+/* Header */
+.hero{position:relative;text-align:center;margin:0 -12px;padding:calc(16px + env(safe-area-inset-top)) 16px 14px;
+  background:radial-gradient(120% 90% at 50% 0%,#fffdf6 0%,#f3eee1 55%,var(--bg) 100%)}
+.hero .logo{width:62px;height:62px;color:var(--g);margin:0 auto -4px;display:block}
+.hero h1{margin:2px 0 6px;font-size:31px;font-weight:800;color:var(--g);letter-spacing:0}
+.tagline{display:inline-block;margin:0;padding:3px 16px;background:#ffffffb3;border:1px solid var(--line);border-radius:999px;font-size:14.5px;color:#36423b}
+.gear{position:absolute;top:calc(14px + env(safe-area-inset-top));left:14px;width:46px;height:46px;border-radius:14px;background:#fff;border:1px solid var(--line);display:grid;place-items:center;color:#26302b;box-shadow:0 2px 8px #0000000f}
+.gear svg{width:24px;height:24px}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:0 1px 2px #0000000a,0 4px 14px #00000009}
+.warn{margin-top:10px;padding:10px 14px;border-radius:14px;background:#fff4e0;border:1px solid #f2d29b;color:#7a4b00;font-size:14px}
+
+/* Date bar */
+.datebar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px 8px 8px;margin-top:6px}
+.date-chip{position:relative;display:flex;align-items:center;gap:10px;min-width:0;flex:1;padding:4px 4px}
+.date-chip svg{width:24px;height:24px;color:#26302b}
+.date-chip .dt{display:flex;flex-direction:column;min-width:0}
+.date-chip .dl{font-weight:700;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.date-chip .hl{font-size:13px;color:var(--muted)}
+.date-chip input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;border:0}
+.day-nav{display:flex;align-items:center;gap:4px}
+.nav-btn{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;color:#26302b}
+.nav-btn:active{background:var(--soft)}
+.nav-btn:disabled{opacity:.3}
+.nav-btn svg{width:22px;height:22px}
+.today-btn{font-size:14px;font-weight:700;color:var(--g);padding:6px 10px;border-radius:10px;background:var(--g3)}
+
+/* Main CTA */
+.cta{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;margin-top:12px;padding:17px 16px;border-radius:var(--r);
+  background:linear-gradient(180deg,#2c8753,#1c5f37);color:#fff;font-size:25px;font-weight:800;box-shadow:0 6px 18px #1f6b3f40,inset 0 1px 0 #ffffff30}
+.cta svg{width:34px;height:34px}
+.cta:active{transform:translateY(1px)}
+
+.acts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:8px;margin-top:10px}
+.act{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:92px;padding:12px 4px;background:var(--soft);border:1px solid var(--line);border-radius:14px;font-weight:800;font-size:15.5px;line-height:1.3;text-align:center}
+.act svg{width:32px;height:32px;color:var(--c)}
+.act:active{background:#ece7dc}
+
+/* Accordions */
+.acc{margin-top:10px;overflow:hidden}
+.acc-head{display:flex;align-items:center;gap:12px;width:100%;padding:15px 16px;font-size:19.5px;font-weight:800;text-align:right;cursor:pointer;user-select:none}
+.acc-head:focus-visible{outline:3px solid #2a815066;outline-offset:-3px}
+.acc-head .ic{width:30px;height:30px;color:var(--g)}
+.acc-head .ttl{flex:1;min-width:0}
+.acc-head .chev{width:24px;height:24px;color:var(--g);transition:transform .2s}
+.acc.open .acc-head .chev{transform:rotate(90deg)}
+.acc-body{display:none;padding:2px 12px 14px}
+.acc.open .acc-body{display:block}
+.acc.today .acc-head{background:linear-gradient(180deg,#2c8753,#1c5f37);color:#fff}
+.acc.today .acc-head .ic,.acc.today .acc-head .chev{color:#fff}
+.acc.today .acc-head .ic{background:#ffffff26;border-radius:9px;padding:3px}
+.acc.today.open .acc-body{padding-top:10px}
+.badge{font-size:14px;font-weight:700;padding:4px 12px;border-radius:10px;white-space:nowrap}
+.badge.red{background:var(--redbg);color:var(--red)}
+.badge.amber{background:#fff1d6;color:#8a5800}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:15px;font-weight:700;padding:6px 12px;border-radius:12px}
+.pill svg{width:18px;height:18px}
+.pill.green{background:#dcf1e1;color:var(--g)}
+.pill.blue{background:var(--bluebg);color:var(--blue)}
+
+/* Today mini cards */
+.minis{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+@media (min-width:540px){.minis{grid-template-columns:repeat(6,1fr)}}
+.mini{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 4px 9px;background:#fff;border:1px solid var(--line);border-radius:14px;text-align:center}
+.mini svg{width:28px;height:28px;color:var(--c)}
+.mini .mn{font-size:13.5px;font-weight:700;line-height:1.25}
+.mini .mv{font-size:14px;color:#33403a}
+.mini .mv b{font-size:22px;font-weight:800;color:var(--g);margin-left:3px}
+.mini .mv b.z{color:#b8beb9}
+.mini .mx{font-size:12px;color:var(--muted)}
+
+h4.sub{margin:14px 2px 8px;font-size:15.5px;color:#36423b}
+.empty{padding:14px;text-align:center;color:var(--muted);font-size:15px;background:var(--g4);border-radius:12px;margin-top:10px}
+
+/* Entry item */
+.entries{display:flex;flex-direction:column;gap:8px}
+.entry{display:flex;gap:10px;align-items:flex-start;padding:11px 12px;background:#fff;border:1px solid var(--line);border-radius:14px;border-right:4px solid var(--c)}
+.entry .e-ic svg{width:24px;height:24px;color:var(--c);margin-top:2px}
+.e-body{flex:1;min-width:0}
+.e-top{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+.e-top b{font-size:16px}
+.e-amt{font-weight:700;color:var(--g)}
+.e-loc{font-size:14.5px;color:#33403a}
+.e-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:3px;font-size:13px;color:var(--muted);align-items:center}
+.e-note{margin-top:5px;padding:6px 9px;background:var(--soft);border-radius:9px;font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere}
+.e-act{display:flex;flex-direction:column;gap:4px}
+.e-act button{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;color:#56615a}
+.e-act button:active{background:var(--soft)}
+.e-act svg{width:19px;height:19px}
+.mchip{display:inline-block;padding:1px 9px;border-radius:999px;font-size:12.5px;font-weight:700}
+.m-mutqan{background:#dcf1e1;color:#1c6b37}
+.m-jayyid{background:#e6eefb;color:#1d58b0}
+.m-weak{background:var(--redbg);color:var(--red)}
+
+/* Calendar */
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.cal-head b{font-size:17px}
+.cal-wd,.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.cal-wd span{text-align:center;font-size:12px;color:var(--muted);font-weight:700}
+.day{position:relative;aspect-ratio:1/1;border-radius:11px;background:#fff;border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-weight:700;font-size:15px}
+.day.has{background:var(--g3);border-color:#c5e1cd}
+.day.sel{outline:2.5px solid var(--g);outline-offset:-1px}
+.day.today .num{color:#fff;background:var(--g);border-radius:999px;min-width:24px;padding:0 4px;line-height:24px}
+.day.future{opacity:.45}
+.dots{display:flex;gap:2px;height:6px}
+.dots i{width:6px;height:6px;border-radius:50%;background:var(--c)}
+.cal-note{font-size:14px;color:var(--muted);margin:10px 2px 0}
+
+/* Stats */
+.tabs{display:flex;background:var(--soft);border-radius:12px;padding:4px;gap:4px}
+.tabs button{flex:1;padding:8px 4px;border-radius:9px;font-weight:700;font-size:15px;color:#4a5550}
+.tabs button[aria-pressed="true"]{background:#fff;color:var(--g);box-shadow:0 1px 3px #0000001a}
+.range{font-size:13.5px;color:var(--muted);margin:8px 2px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:7px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:12px;padding:9px;text-align:center}
+.kpi b{display:block;font-size:24px;color:var(--g);line-height:1.2}
+.kpi span{font-size:13px;color:var(--muted)}
+.srows{margin-top:10px;display:flex;flex-direction:column;gap:6px}
+.srow{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#fff;border:1px solid var(--line);border-radius:12px}
+.srow svg{width:22px;height:22px;color:var(--c)}
+.srow .sn{font-weight:700;min-width:0;flex:1}
+.srow .sv{font-weight:700;color:var(--g);text-align:left}
+.srow .sc{font-size:12.5px;color:var(--muted);display:block;font-weight:500}
+.method{font-size:13px;color:var(--muted);background:var(--g4);border-radius:10px;padding:9px 11px;margin-top:10px}
+
+/* Weak */
+.weak{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px;border-right:4px solid var(--red)}
+.weak .wl{font-weight:800;font-size:16.5px}
+.weak .wm{display:flex;flex-wrap:wrap;gap:6px 10px;font-size:13.5px;color:var(--muted);margin-top:4px;align-items:center}
+.weak .wb{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+
+/* Log filters */
+.filters{display:flex;gap:8px;margin-bottom:10px}
+.filters select,.filters input{flex:1;min-width:0}
+
+/* Forms */
+.inp,select.inp,textarea.inp{width:100%;padding:11px 12px;border:1px solid #d9d3c6;border-radius:12px;background:#fff;font-size:16px;min-height:46px}
+textarea.inp{min-height:84px;resize:vertical}
+.inp:focus{outline:2px solid #2a815055;border-color:var(--g2)}
+.inp[readonly]{background:var(--g4);color:var(--g);font-weight:700}
+.lbl{display:block;font-weight:700;font-size:15px;margin:0 2px 6px}
+.lbl small{font-weight:500;color:var(--muted)}
+.f-sec{margin-top:14px}
+.f-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.f-grid .full{grid-column:1/-1}
+.hint{font-size:13px;color:var(--muted);margin:5px 2px 0}
+.picks{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.pick{display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 3px;border-radius:12px;border:1.5px solid var(--line);background:#fff;font-weight:700;font-size:13.5px;line-height:1.25;text-align:center}
+.pick svg{width:24px;height:24px;color:var(--c)}
+.pick[aria-pressed="true"]{border-color:var(--g);background:var(--g3);box-shadow:inset 0 0 0 1px var(--g)}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{flex:1 1 auto;padding:9px 10px;border-radius:11px;border:1.5px solid var(--line);background:#fff;font-weight:700;font-size:15px}
+.seg button[aria-pressed="true"]{border-color:var(--g);background:var(--g3);color:var(--g)}
+.seg.mastery button[data-m="weak"][aria-pressed="true"]{border-color:var(--red);background:var(--redbg);color:var(--red)}
+.err{color:var(--red);font-weight:700;font-size:14.5px;margin-top:12px;min-height:0}
+.err:empty{display:none}
+.btns{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.btn{flex:1 1 auto;padding:12px 14px;border-radius:13px;font-weight:800;font-size:16px;background:var(--soft);border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.btn svg{width:19px;height:19px}
+.btn.primary{background:linear-gradient(180deg,#2c8753,#1c5f37);color:#fff;border:0}
+.btn.danger{background:var(--redbg);color:var(--red);border-color:#f5c5c5}
+.btn.small{flex:0 0 auto;padding:8px 12px;font-size:14px;border-radius:11px}
+
+/* Sheet & dialog */
+.layer{position:fixed;inset:0;background:#0b1a1266;z-index:50;display:flex;align-items:flex-end;justify-content:center}
+.layer[hidden]{display:none}
+.sheet{width:100%;max-width:580px;max-height:92vh;overflow:auto;background:var(--card);border-radius:22px 22px 0 0;padding:16px 16px calc(18px + env(safe-area-inset-bottom));box-shadow:0 -8px 30px #0003;animation:up .2s ease-out}
+@keyframes up{from{transform:translateY(30px);opacity:.6}to{transform:none;opacity:1}}
+.sheet-h{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.sheet-h h3{margin:0;font-size:21px;color:var(--g)}
+.x{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:var(--soft)}
+.x svg{width:20px;height:20px}
+.sheet p{margin:8px 0}
+#dlg{align-items:center;z-index:60;padding:20px}
+.dlg-box{background:var(--card);border-radius:18px;padding:18px;max-width:400px;width:100%;box-shadow:0 10px 40px #0004}
+.dlg-box p{margin:0 0 4px;font-size:16.5px;font-weight:700}
+textarea.json{direction:ltr;text-align:left;font-family:ui-monospace,Menlo,monospace;font-size:12px;min-height:160px}
+.info{font-size:14.5px;color:#36423b}
+.info li{margin-bottom:5px}
+
+/* Toast */
+.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);background:#1d2722;color:#fff;padding:10px 18px;border-radius:12px;font-weight:700;font-size:15px;opacity:0;pointer-events:none;transition:.25s;z-index:70;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* Bottom nav */
+.bnav{position:fixed;bottom:0;left:0;right:0;z-index:40;background:#fff;border-top:1px solid var(--line);border-radius:22px 22px 0 0;box-shadow:0 -4px 18px #0000000f;padding:6px 8px calc(6px + env(safe-area-inset-bottom))}
+.bnav-in{max-width:580px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+.bnav button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 2px;border-radius:14px;font-size:13.5px;font-weight:700;color:#3a4540}
+.bnav button svg{width:26px;height:26px}
+.bnav button.on{background:var(--g3);color:var(--g)}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="hero">
+    <button class="gear" id="btnSettings" aria-label="الإعدادات"></button>
+    <svg class="logo" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">
+      <path d="M32 20c-6-5-15-6-24-5v30c9-1 18 0 24 5 6-5 15-6 24-5V15c-9-1-18 0-24 5z" fill="#e8f3ea"/>
+      <path d="M32 20v30"/><path d="M14 22c5 0 9 1 13 3M14 29c5 0 9 1 13 3M37 25c4-2 8-3 13-3M37 32c4-2 8-3 13-3"/>
+    </svg>
+    <h1>متابعتي مع القرآن</h1>
+    <p class="tagline">لحفظ ومراجعة وتثبيت كتاب الله</p>
+  </header>
+
+  <div id="storageWarn" class="warn hidden"></div>
+
+  <div class="card datebar">
+    <label class="date-chip" id="dateChip">
+      <span id="calIc"></span>
+      <span class="dt"><span class="dl" id="dateLabel"></span><span class="hl" id="hijriLabel"></span></span>
+      <input type="date" id="datePicker" aria-label="اختيار تاريخ">
+    </label>
+    <div class="day-nav">
+      <button class="today-btn hidden" id="todayBtn">اليوم</button>
+      <button class="nav-btn" id="prevDay" aria-label="اليوم السابق"></button>
+      <button class="nav-btn" id="nextDay" aria-label="اليوم التالي"></button>
+    </div>
+  </div>
+
+  <button class="cta" id="ctaBtn"><span>تسجيل إنجاز جديد</span><span id="ctaIc"></span></button>
+
+  <div class="card acts" id="acts"></div>
+
+  <section class="card acc today" data-acc="today">
+    <div class="acc-head" role="button" tabindex="0"><span id="todayIc"></span><span class="ttl" id="todayTitle">إنجاز اليوم</span><span class="chevw"></span></div>
+    <div class="acc-body" id="todayBody"></div>
+  </section>
+
+  <section class="card acc" data-acc="calendar" id="secCalendar">
+    <div class="acc-head" role="button" tabindex="0"><span class="icw" data-ic="calCheck"></span><span class="ttl">تقويم الإنجاز</span><span class="chevw"></span></div>
+    <div class="acc-body" id="calBody"></div>
+  </section>
+
+  <section class="card acc" data-acc="stats">
+    <div class="acc-head" role="button" tabindex="0"><span class="icw" data-ic="chart"></span><span class="ttl">الإحصائية</span><span class="chevw"></span></div>
+    <div class="acc-body" id="statsBody"></div>
+  </section>
+
+  <section class="card acc" data-acc="weak" id="secWeak">
+    <div class="acc-head" role="button" tabindex="0"><span class="icw" data-ic="target"></span><span class="ttl">مقاطع تحتاج إلى تثبيت</span><span id="weakBadge"></span><span class="chevw"></span></div>
+    <div class="acc-body" id="weakBody"></div>
+  </section>
+
+  <section class="card acc" data-acc="log" id="secLog">
+    <div class="acc-head" role="button" tabindex="0"><span class="icw" data-ic="list"></span><span class="ttl">السجل الكامل للإنجازات</span><span class="chevw"></span></div>
+    <div class="acc-body" id="logBody"></div>
+  </section>
+
+  <section class="card acc" data-acc="backup" id="secBackup">
+    <div class="acc-head" role="button" tabindex="0"><span class="icw" data-ic="db"></span><span class="ttl">النسخة الاحتياطية للبيانات</span><span id="backupBadge"></span><span class="chevw"></span></div>
+    <div class="acc-body" id="backupBody"></div>
+  </section>
+</div>
+
+<nav class="bnav" aria-label="التنقل">
+  <div class="bnav-in">
+    <button class="on" data-nav="home"><span data-ic="home"></span>الرئيسية</button>
+    <button data-nav="add"><span data-ic="plus"></span>تسجيل</button>
+    <button data-nav="log"><span data-ic="list"></span>السجل</button>
+    <button data-nav="calendar"><span data-ic="calendar"></span>التقويم</button>
+    <button data-nav="more"><span data-ic="more"></span>المزيد</button>
+  </div>
+</nav>
+
+<div class="layer" id="sheetLayer" hidden><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
+<div class="layer" id="dlg" hidden></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+'use strict';
+const $=(s,r)=>(r||document).querySelector(s);
+const $$=(s,r)=>Array.from((r||document).querySelectorAll(s));
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* ---------- Reference data ---------- */
+const SURAH_DATA="الفاتحة:7|البقرة:286|آل عمران:200|النساء:176|المائدة:120|الأنعام:165|الأعراف:206|الأنفال:75|التوبة:129|يونس:109|هود:123|يوسف:111|الرعد:43|إبراهيم:52|الحجر:99|النحل:128|الإسراء:111|الكهف:110|مريم:98|طه:135|الأنبياء:112|الحج:78|المؤمنون:118|النور:64|الفرقان:77|الشعراء:227|النمل:93|القصص:88|العنكبوت:69|الروم:60|لقمان:34|السجدة:30|الأحزاب:73|سبأ:54|فاطر:45|يس:83|الصافات:182|ص:88|الزمر:75|غافر:85|فصلت:54|الشورى:53|الزخرف:89|الدخان:59|الجاثية:37|الأحقاف:35|محمد:38|الفتح:29|الحجرات:18|ق:45|الذاريات:60|الطور:49|النجم:62|القمر:55|الرحمن:78|الواقعة:96|الحديد:29|المجادلة:22|الحشر:24|الممتحنة:13|الصف:14|الجمعة:11|المنافقون:11|التغابن:18|الطلاق:12|التحريم:12|الملك:30|القلم:52|الحاقة:52|المعارج:44|نوح:28|الجن:28|المزمل:20|المدثر:56|القيامة:40|الإنسان:31|المرسلات:50|النبأ:40|النازعات:46|عبس:42|التكوير:29|الانفطار:19|المطففين:36|الانشقاق:25|البروج:22|الطارق:17|الأعلى:19|الغاشية:26|الفجر:30|البلد:20|الشمس:15|الليل:21|الضحى:11|الشرح:8|التين:8|العلق:19|القدر:5|البينة:8|الزلزلة:8|العاديات:11|القارعة:11|التكاثر:8|العصر:3|الهمزة:9|الفيل:5|قريش:4|الماعون:7|الكوثر:3|الكافرون:6|النصر:3|المسد:5|الإخلاص:4|الفلق:5|الناس:6";
+const SURAHS=SURAH_DATA.split('|').map((s,i)=>{const p=s.split(':');return{n:i+1,name:p[0],ayat:+p[1]};});
+const MAX_PAGE=604, MAX_JUZ=30;
+
+const I={
+ book:'<path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>',
+ bookPlus:'<path d="M12 7v14"/><path d="M12 7a4 4 0 0 0-4-4H3a1 1 0 0 0-1 1v13a1 1 0 0 0 1 1h6a3 3 0 0 1 3 3 3 3 0 0 1 3-3h1"/><path d="M12 7a4 4 0 0 1 4-4h2"/><path d="M20 10v8M16 14h8"/>',
+ refresh:'<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/>',
+ shield:'<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>',
+ headphones:'<path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"/>',
+ users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+ calendar:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+ calCheck:'<rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="m9 16 2 2 4-4"/>',
+ chart:'<path d="M6 20v-5M12 20V9M18 20V4" stroke-width="3.2"/>',
+ target:'<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+ list:'<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 9h10M7 13h10M7 17h6"/>',
+ db:'<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/>',
+ check:'<rect x="3" y="3" width="18" height="18" rx="4"/><path d="m8 12 3 3 5-6"/>',
+ chevR:'<path d="m9 18 6-6-6-6"/>',
+ chevL:'<path d="m15 18-6-6 6-6"/>',
+ plus:'<rect x="3" y="3" width="18" height="18" rx="4"/><path d="M12 8v8M8 12h8"/>',
+ home:'<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+ more:'<circle cx="5" cy="12" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/><circle cx="19" cy="12" r="1.3" fill="currentColor"/>',
+ gear:'<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>',
+ download:'<path d="M12 3v12M7 10l5 5 5-5"/><path d="M5 21h14"/>',
+ upload:'<path d="M12 15V3M7 8l5-5 5 5"/><path d="M5 21h14"/>',
+ edit:'<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+ trash:'<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/>',
+ x:'<path d="M18 6 6 18M6 6l12 12"/>',
+ copy:'<rect x="8" y="8" width="13" height="13" rx="2"/><path d="M4 16V5a2 2 0 0 1 2-2h11"/>'
+};
+const icon=(n,cls)=>`<svg ${cls?`class="${cls}"`:''} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${I[n]}</svg>`;
+
+const ACTS={
+ hifz:{name:'حفظ جديد',color:'#2e7d32',icon:'bookPlus',mastery:true},
+ muraja:{name:'مراجعة القديم',color:'#1e63c6',icon:'refresh',mastery:true},
+ tathbit:{name:'تثبيت المراجعة',color:'#7b3fa0',icon:'shield',mastery:true},
+ tilawa:{name:'التلاوة',color:'#1f5fb5',icon:'book',mastery:false},
+ istima:{name:'الاستماع',color:'#8a2fb8',icon:'headphones',mastery:false,minutes:true},
+ qiraa:{name:'القراءة على شخص',color:'#8a5a1c',icon:'users',mastery:true}
+};
+const ACT_KEYS=['hifz','muraja','tathbit','tilawa','qiraa','istima'];
+const GRID_ORDER=['hifz','muraja','istima','tathbit','tilawa','qiraa'];
+const UNITS={ayah:['آية','آيات'],page:['صفحة','صفحات'],juz:['جزء','أجزاء'],min:['دقيقة','دقائق'],rec:['تسجيل','تسجيلات'],seg:['مقطع','مقاطع'],day:['يوم','أيام']};
+const UNIT_TABS=[['page','صفحات'],['ayah','آيات'],['juz','أجزاء']];
+const MASTERY={mutqan:'متقن',jayyid:'جيد',weak:'يحتاج تثبيتا'};
+
+const uw=(n,u)=>(Number.isInteger(n)&&n>=3&&n<=10)?UNITS[u][1]:UNITS[u][0];
+const fnum=n=>String(Math.round(n*100)/100);
+const cnt=(n,u)=>`${fnum(n)} ${uw(n,u)}`;
+
+/* ---------- Dates ---------- */
+const pad=n=>String(n).padStart(2,'0');
+const ymd=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const parse=s=>{const p=s.split('-').map(Number);return new Date(p[0],p[1]-1,p[2]);};
+const todayStr=()=>ymd(new Date());
+const addDays=(s,n)=>{const d=parse(s);d.setDate(d.getDate()+n);return ymd(d);};
+function fmt(d,opts,cal){
+  const tries=cal?[`ar-u-ca-${cal}-nu-latn`,'ar-u-ca-islamic-nu-latn']:['ar-u-nu-latn','ar'];
+  for(const loc of tries){try{return new Intl.DateTimeFormat(loc,opts).format(d);}catch(e){}}
+  return cal?'':ymd(d);
+}
+const fmtLong=s=>fmt(parse(s),{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+const fmtShort=s=>fmt(parse(s),{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+const fmtDM=s=>fmt(parse(s),{weekday:'long',day:'numeric',month:'long'});
+const fmtHijri=s=>fmt(parse(s),{day:'numeric',month:'long',year:'numeric'},'islamic-umalqura');
+const weekStart=s=>{const d=parse(s);return addDays(s,-((d.getDay()+1)%7));}; // week starts Saturday
+
+/* ---------- Storage (IndexedDB → localStorage → memory) ---------- */
+const Store=(function(){
+  const DBN='mutabaati-quran',ST='kv';let db=null,mode='memory';const mem={};
+  function openIDB(){return new Promise((res,rej)=>{try{const r=indexedDB.open(DBN,1);r.onupgradeneeded=()=>r.result.createObjectStore(ST);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);}catch(e){rej(e);}});}
+  async function init(){
+    try{db=await openIDB();mode='idb';}
+    catch(e){try{localStorage.setItem('__t','1');localStorage.removeItem('__t');mode='ls';}catch(e2){mode='memory';}}
+    try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});}catch(e){}
+  }
+  function get(k){
+    if(mode==='idb')return new Promise(res=>{try{const q=db.transaction(ST,'readonly').objectStore(ST).get(k);q.onsuccess=()=>res(q.result);q.onerror=()=>res(undefined);}catch(e){res(undefined);}});
+    if(mode==='ls'){try{const v=localStorage.getItem(DBN+':'+k);return Promise.resolve(v?JSON.parse(v):undefined);}catch(e){return Promise.resolve(undefined);}}
+    return Promise.resolve(mem[k]);
+  }
+  function set(k,v){
+    if(mode==='idb')return new Promise(res=>{try{const tx=db.transaction(ST,'readwrite');tx.objectStore(ST).put(v,k);tx.oncomplete=()=>res(true);tx.onerror=tx.onabort=()=>{toast('تعذر حفظ البيانات على الجهاز');res(false);};}catch(e){toast('تعذر حفظ البيانات على الجهاز');res(false);}});
+    if(mode==='ls'){try{localStorage.setItem(DBN+':'+k,JSON.stringify(v));return Promise.resolve(true);}catch(e){toast('تعذر حفظ البيانات على الجهاز');return Promise.resolve(false);}}
+    mem[k]=JSON.parse(JSON.stringify(v));return Promise.resolve(true);
+  }
+  return{init,get,set,get mode(){return mode;}};
+})();
+
+/* ---------- State ---------- */
+const S={entries:[],segments:[],prefs:{open:{today:true},lastBackup:null,lastUnit:{}}};
+let selDate=todayStr(),lastToday=selDate,calY,calM,statTab='week',logAct='all',logMonth='',logLimit=40;
+const syncCal=()=>{const d=parse(selDate);calY=d.getFullYear();calM=d.getMonth();};
+const save=()=>Store.set('data',{entries:S.entries,segments:S.segments});
+const savePrefs=()=>Store.set('prefs',S.prefs);
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+const entriesOn=d=>S.entries.filter(e=>e.date===d).sort((a,b)=>b.createdAt-a.createdAt);
+const sortDesc=l=>l.slice().sort((a,b)=>a.date<b.date?1:a.date>b.date?-1:b.createdAt-a.createdAt);
+
+/* ---------- Entry helpers ---------- */
+function amountText(e){
+  const p=[];
+  if(e.minutes>0)p.push(cnt(e.minutes,'min'));
+  if(UNITS[e.unit]&&e.amount>0)p.push(cnt(e.amount,e.unit));
+  return p.join(' · ')||'—';
+}
+function locText(e){
+  const s=e.surah?SURAHS[e.surah-1].name:'';
+  if(e.unit==='ayah'){
+    if(s&&e.from&&e.to)return e.from===e.to?`${s}: آية ${e.from}`:`${s}: الآيات ${e.from}–${e.to}`;
+    return s?`سورة ${s}`:'';
+  }
+  if(e.unit==='page'){
+    let t='';if(e.from&&e.to)t=e.from===e.to?`صفحة ${e.from}`:`الصفحات ${e.from}–${e.to}`;
+    if(s)t=t?`${s} · ${t}`:`سورة ${s}`;return t;
+  }
+  if(e.unit==='juz'&&e.from&&e.to)return e.from===e.to?`الجزء ${e.from}`:`الأجزاء ${e.from}–${e.to}`;
+  return s?`سورة ${s}`:'';
+}
+function locKey(e){
+  if(e.unit==='ayah'&&e.surah&&e.from&&e.to)return `a|${e.surah}|${e.from}|${e.to}`;
+  if(e.unit==='page'&&e.from&&e.to)return `p|${e.from}|${e.to}`;
+  if(e.unit==='juz'&&e.from&&e.to)return `j|${e.from}|${e.to}`;
+  return null;
+}
+function keyLabel(k){
+  const p=k.split('|');
+  if(p[0]==='a')return locText({unit:'ayah',surah:+p[1],from:+p[2],to:+p[3]});
+  if(p[0]==='p')return locText({unit:'page',from:+p[1],to:+p[2]});
+  return locText({unit:'juz',from:+p[1],to:+p[2]});
+}
+function keyToLoc(k){const p=k.split('|');if(p[0]==='a')return{unit:'ayah',surah:+p[1],from:+p[2],to:+p[3]};return{unit:p[0]==='p'?'page':'juz',from:+p[1],to:+p[2]};}
+function cleanupSegments(){const keys=new Set(S.entries.map(locKey).filter(Boolean));S.segments=S.segments.filter(s=>keys.has(s.key));}
+const openSegs=()=>S.segments.filter(s=>s.status==='open');
+
+function totals(list){
+  const t={};ACT_KEYS.forEach(k=>t[k]={ayah:0,page:0,juz:0,min:0,count:0});
+  list.forEach(e=>{const x=t[e.act];if(!x)return;x.count++;if(e.minutes>0)x.min+=e.minutes;if(UNITS[e.unit]&&e.amount>0)x[e.unit]+=e.amount;});
+  return t;
+}
+function parts(x,act){const order=act==='istima'?['min','page','ayah','juz']:['page','ayah','juz','min'];return order.filter(u=>x[u]>0).map(u=>({n:x[u],u}));}
+function totalText(x,act){const p=parts(x,act);if(!p.length)return x.count?cnt(x.count,'rec'):'—';return p.map(q=>cnt(q.n,q.u)).join(' + ');}
+
+function entryHTML(e,showDate){
+  const A=ACTS[e.act],loc=locText(e);
+  return `<div class="entry" style="--c:${A.color}"><div class="e-ic">${icon(A.icon)}</div><div class="e-body">
+    <div class="e-top"><b>${A.name}</b><span class="e-amt">${esc(amountText(e))}</span></div>
+    ${loc?`<div class="e-loc">${esc(loc)}</div>`:''}
+    ${(showDate||e.mastery)?`<div class="e-meta">${showDate?`<span>${esc(fmtShort(e.date))}</span>`:''}${e.mastery?`<span class="mchip m-${e.mastery}">${MASTERY[e.mastery]}</span>`:''}</div>`:''}
+    ${e.note?`<div class="e-note">${esc(e.note)}</div>`:''}
+  </div><div class="e-act"><button data-edit="${esc(e.id)}" aria-label="تعديل">${icon('edit')}</button><button data-del="${esc(e.id)}" aria-label="حذف">${icon('trash')}</button></div></div>`;
+}
+
+/* ---------- Render ---------- */
+function renderStatic(){
+  $('#btnSettings').innerHTML=icon('gear');
+  $('#calIc').innerHTML=icon('calendar');
+  $('#prevDay').innerHTML=icon('chevR');
+  $('#nextDay').innerHTML=icon('chevL');
+  $('#ctaIc').innerHTML=icon('plus');
+  $('#todayIc').innerHTML=icon('check','ic');
+  $$('[data-ic]').forEach(el=>{el.outerHTML=icon(el.dataset.ic,el.classList.contains('icw')?'ic':'');});
+  $$('.chevw').forEach(el=>{el.outerHTML=icon('chevR','chev');});
+  $('#acts').innerHTML=GRID_ORDER.map(k=>`<button class="act" data-open-act="${k}" style="--c:${ACTS[k].color}">${icon(ACTS[k].icon)}<span>${ACTS[k].name}</span></button>`).join('');
+  $('#backupBadge').outerHTML=`<span id="backupBadge"></span><span class="pill green" data-action="export">${icon('download')}تصدير</span><span class="pill blue" data-action="import">${icon('upload')}استيراد</span>`;
+}
+function renderAccState(){$$('.acc').forEach(a=>a.classList.toggle('open',!!S.prefs.open[a.dataset.acc]));$$('.acc-head').forEach(h=>h.setAttribute('aria-expanded',h.parentElement.classList.contains('open')));}
+
+function renderDate(){
+  const t=todayStr();
+  $('#dateLabel').textContent=(selDate===t?'اليوم: ':'')+fmtLong(selDate);
+  $('#hijriLabel').textContent=fmtHijri(selDate);
+  const dp=$('#datePicker');dp.value=selDate;dp.max=t;
+  $('#nextDay').disabled=selDate>=t;
+  $('#todayBtn').classList.toggle('hidden',selDate===t);
+  $('#todayTitle').textContent=selDate===t?'إنجاز اليوم':`إنجاز ${fmtDM(selDate)}`;
+}
+
+function renderToday(){
+  const list=entriesOn(selDate),t=totals(list);
+  let h='<div class="minis">'+ACT_KEYS.map(k=>{
+    const A=ACTS[k],x=t[k],p=parts(x,k),m=p[0];
+    const v=m?`<b>${fnum(m.n)}</b>${uw(m.n,m.u)}`:(x.count?`<b>${x.count}</b>${uw(x.count,'rec')}`:'<b class="z">—</b>');
+    return `<button class="mini" data-open-act="${k}" style="--c:${A.color}">${icon(A.icon)}<span class="mn">${A.name}</span><span class="mv">${v}</span>${p.length>1?`<span class="mx">+ ${p.slice(1).map(q=>cnt(q.n,q.u)).join(' + ')}</span>`:''}</button>`;
+  }).join('')+'</div>';
+  h+=list.length?`<h4 class="sub">تفاصيل ما سُجّل (${cnt(list.length,'rec')})</h4><div class="entries">${list.map(e=>entryHTML(e,false)).join('')}</div>`
+    :`<div class="empty">لم يُسجَّل إنجاز في هذا اليوم بعد. اضغط على أي نشاط لتسجيله.</div>`;
+  $('#todayBody').innerHTML=h;
+}
+
+function renderCalendar(){
+  const first=new Date(calY,calM,1),days=new Date(calY,calM+1,0).getDate(),lead=(first.getDay()+1)%7,t=todayStr();
+  const prefix=`${calY}-${pad(calM+1)}-`;
+  const byDay={};S.entries.forEach(e=>{if(e.date.startsWith(prefix))(byDay[e.date]=byDay[e.date]||new Set()).add(e.act);});
+  const wd=['سبت','أحد','اثنين','ثلاثاء','أربعاء','خميس','جمعة'];
+  let g='';for(let i=0;i<lead;i++)g+='<span></span>';
+  for(let d=1;d<=days;d++){
+    const ds=prefix+pad(d),acts=byDay[ds];
+    const dots=acts?ACT_KEYS.filter(k=>acts.has(k)).slice(0,4).map(k=>`<i style="--c:${ACTS[k].color}"></i>`).join(''):'';
+    g+=`<button class="day${acts?' has':''}${ds===selDate?' sel':''}${ds===t?' today':''}${ds>t?' future':''}" data-day="${ds}" aria-label="${esc(fmtLong(ds))}"><span class="num">${d}</span><span class="dots">${dots}</span></button>`;
+  }
+  const active=Object.keys(byDay).length;
+  const isCur=selDate.startsWith(prefix);
+  const nextDisabled=prefix>t.slice(0,8);
+  let h=`<div class="cal-head"><button class="nav-btn" data-cal="-1" aria-label="الشهر السابق">${icon('chevR')}</button><b>${esc(fmt(first,{month:'long',year:'numeric'}))}</b><button class="nav-btn" data-cal="1" aria-label="الشهر التالي" ${nextDisabled?'disabled':''}>${icon('chevL')}</button></div>
+  <div class="cal-wd">${wd.map(w=>`<span>${w}</span>`).join('')}</div><div class="cal-grid" style="margin-top:5px">${g}</div>
+  <p class="cal-note">أيام فيها تسجيل هذا الشهر: <b>${active}</b>. الأيام الخالية أيام لم يُسجَّل لها إنجاز، وليست إخفاقا.</p>`;
+  if(isCur){const l=entriesOn(selDate);h+=`<h4 class="sub">${esc(fmtLong(selDate))}</h4>`+(l.length?`<div class="entries">${l.map(e=>entryHTML(e,false)).join('')}</div>`:'<div class="empty">لا توجد تسجيلات في هذا اليوم.</div>');}
+  $('#calBody').innerHTML=h;
+}
+
+function renderStats(){
+  let from,to,label;
+  if(statTab==='week'){from=weekStart(selDate);to=addDays(from,6);label=`من ${fmtDM(from)} إلى ${fmtDM(to)}`;}
+  else if(statTab==='month'){const d=parse(selDate);from=ymd(new Date(d.getFullYear(),d.getMonth(),1));to=ymd(new Date(d.getFullYear(),d.getMonth()+1,0));label=`شهر ${fmt(d,{month:'long',year:'numeric'})}`;}
+  else{const ds=S.entries.map(e=>e.date).sort();from=ds[0]||todayStr();to=ds[ds.length-1]||todayStr();label=ds.length?`منذ أول تسجيل في ${fmtShort(from)}`:'لا توجد تسجيلات بعد';}
+  const list=statTab==='all'?S.entries:S.entries.filter(e=>e.date>=from&&e.date<=to);
+  const t=totals(list),daysActive=new Set(list.map(e=>e.date)).size;
+  let h=`<div class="tabs">${[['week','الأسبوع'],['month','الشهر'],['all','منذ البداية']].map(([k,n])=>`<button data-stat="${k}" aria-pressed="${statTab===k}">${n}</button>`).join('')}</div>
+  <p class="range">${esc(label)}</p>
+  <div class="kpis"><div class="kpi"><b>${daysActive}</b><span>${statTab==='all'?'أيام النشاط':'أيام النشاط'}</span></div><div class="kpi"><b>${list.length}</b><span>عدد التسجيلات</span></div>${statTab!=='week'?`<div class="kpi"><b>${openSegs().length}</b><span>مقاطع تحتاج تثبيتا حاليا</span></div>`:''}</div>
+  <div class="srows">${ACT_KEYS.map(k=>{const A=ACTS[k],x=t[k];return `<div class="srow" style="--c:${A.color}">${icon(A.icon)}<span class="sn">${A.name}</span><span class="sv">${esc(totalText(x,k))}<span class="sc">${x.count?cnt(x.count,'rec'):'لا تسجيل'}</span></span></div>`;}).join('')}</div>`;
+  if(statTab==='all'){
+    const ay=new Set(),pg=new Set();
+    S.entries.forEach(e=>{if(e.act!=='hifz'||!e.from||!e.to)return;
+      if(e.unit==='ayah'&&e.surah)for(let a=e.from;a<=e.to;a++)ay.add(e.surah+':'+a);
+      if(e.unit==='page')for(let p=e.from;p<=e.to;p++)pg.add(p);});
+    if(ay.size||pg.size)h+=`<div class="method"><b>تغطية الحفظ الجديد</b> (من التسجيلات المحددة الموضع، دون تكرار): ${[ay.size?cnt(ay.size,'ayah')+' مختلفة':'',pg.size?`${cnt(pg.size,'page')} مختلفة من ${MAX_PAGE}`:''].filter(Boolean).join(' · ')}</div>`;
+  }
+  h+=`<div class="method">كل نشاط يُحسب مستقلا بوحداته، دون تحويل بين الآيات والصفحات. وتكرار المقطع في أيام مختلفة يُعدّ مراجعات متعددة، لا زيادة في مقدار المحفوظ. الأرقام تعكس ما أدخلتَه بنفسك.</div>`;
+  $('#statsBody').innerHTML=h;
+}
+
+function renderWeak(){
+  const segs=openSegs().map(s=>{const l=sortDesc(S.entries.filter(e=>locKey(e)===s.key));return{s,l,last:l[0],noteE:l.find(e=>e.note)};})
+    .sort((a,b)=>(a.last?a.last.date:'')<(b.last?b.last.date:'')?-1:1);
+  const n=segs.length;
+  $('#weakBadge').innerHTML=n?`<span class="badge red">يوجد ${n} ${uw(n,'seg')}</span>`:'';
+  if(!n){$('#weakBody').innerHTML='<div class="empty">لا توجد مقاطع موسومة بأنها تحتاج إلى تثبيت. عند التسجيل اختر «يحتاج تثبيتا» وحدد الموضع ليظهر المقطع هنا.</div>';return;}
+  $('#weakBody').innerHTML=`<p class="hint" style="margin:0 2px 8px">مرتبة من الأقدم عملا عليه إلى الأحدث.</p><div class="entries">`+segs.map(({s,l,last,noteE})=>`<div class="weak">
+    <div class="wl">${esc(keyLabel(s.key))}</div>
+    <div class="wm">${last&&last.mastery?`<span>آخر تقدير: <span class="mchip m-${last.mastery}">${MASTERY[last.mastery]}</span></span>`:''}${last?`<span>آخر عمل عليه: ${esc(fmtShort(last.date))} (${esc(ACTS[last.act].name)})</span>`:''}<span>${cnt(l.length,'rec')}</span></div>
+    ${noteE?`<div class="e-note">${esc(noteE.note)}</div>`:''}
+    <div class="wb"><button class="btn small primary" data-weak-log="${esc(s.key)}">${icon('shield')}سجّل تثبيتا لهذا المقطع</button><button class="btn small" data-weak-resolve="${esc(s.key)}">تحسّن الحفظ: أزل الوسم</button></div>
+  </div>`).join('')+'</div>';
+}
+
+function renderLog(){
+  let l=S.entries;if(logAct!=='all')l=l.filter(e=>e.act===logAct);if(logMonth)l=l.filter(e=>e.date.startsWith(logMonth));
+  l=sortDesc(l);
+  const months=[...new Set(S.entries.map(e=>e.date.slice(0,7)))].sort().reverse();
+  let h=`<div class="filters"><select class="inp" id="logAct" aria-label="تصفية بالنشاط"><option value="all">كل الأنشطة</option>${ACT_KEYS.map(k=>`<option value="${k}" ${logAct===k?'selected':''}>${ACTS[k].name}</option>`).join('')}</select>
+  <select class="inp" id="logMonth" aria-label="تصفية بالشهر"><option value="">كل الأشهر</option>${months.map(m=>`<option value="${m}" ${logMonth===m?'selected':''}>${esc(fmt(parse(m+'-01'),{month:'long',year:'numeric'}))}</option>`).join('')}</select></div>`;
+  if(!l.length)h+='<div class="empty">لا توجد تسجيلات مطابقة.</div>';
+  else{h+=`<p class="hint" style="margin:0 2px 8px">${cnt(l.length,'rec')} — من الأحدث إلى الأقدم</p><div class="entries">${l.slice(0,logLimit).map(e=>entryHTML(e,true)).join('')}</div>`;
+    if(l.length>logLimit)h+=`<div class="btns"><button class="btn" id="logMore">عرض المزيد</button></div>`;}
+  $('#logBody').innerHTML=h;
+  $('#logAct').onchange=e=>{logAct=e.target.value;logLimit=40;renderLog();};
+  $('#logMonth').onchange=e=>{logMonth=e.target.value;logLimit=40;renderLog();};
+  const m=$('#logMore');if(m)m.onclick=()=>{logLimit+=40;renderLog();};
+}
+
+function backupDue(){
+  if(!S.entries.length)return false;
+  if(!S.prefs.lastBackup)return S.entries.length>=5;
+  return (Date.now()-new Date(S.prefs.lastBackup).getTime())>14*864e5;
+}
+function renderBackup(){
+  $('#backupBadge').innerHTML=backupDue()?'<span class="badge amber">يُنصح بالتصدير</span>':'';
+  const lb=S.prefs.lastBackup?fmtShort(ymd(new Date(S.prefs.lastBackup))):'لم يتم بعد';
+  $('#backupBody').innerHTML=`<ul class="info"><li>عدد التسجيلات المحفوظة في هذا المتصفح: <b>${S.entries.length}</b></li><li>آخر تصدير: <b>${esc(lb)}</b></li>
+  <li>البيانات محفوظة على هذا الجهاز فقط، ولا تنتقل تلقائيا إلى غيره. وقد تضيع إذا مُسحت بيانات المتصفح، فاحتفظ بنسخة احتياطية في مكان آمن.</li></ul>
+  <div class="btns"><button class="btn primary" data-action="export">${icon('download')}تصدير نسخة احتياطية</button><button class="btn" data-action="import">${icon('upload')}استيراد</button></div>`;
+}
+function renderStorageWarn(){
+  const w=$('#storageWarn');
+  if(Store.mode==='memory'){w.textContent='تنبيه: هذا المتصفح لا يسمح بالحفظ المحلي هنا، فستضيع التسجيلات عند إغلاق الصفحة. صدّر نسخة احتياطية قبل الخروج.';w.classList.remove('hidden');}
+  else w.classList.add('hidden');
+}
+function renderAll(){renderDate();renderToday();renderCalendar();renderStats();renderWeak();renderLog();renderBackup();}
+
+/* ---------- Sheet / dialog / toast ---------- */
+let toastT;
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2600);}
+function openSheet(html){const L=$('#sheetLayer');$('#sheet').innerHTML=html;L.hidden=false;document.body.style.overflow='hidden';$('#sheet').scrollTop=0;}
+function closeSheet(){$('#sheetLayer').hidden=true;$('#sheet').innerHTML='';document.body.style.overflow='';}
+$('#sheetLayer').addEventListener('click',e=>{if(e.target.id==='sheetLayer'||e.target.closest('[data-close]'))closeSheet();});
+function ask(msg,ok,danger){
+  return new Promise(res=>{const d=$('#dlg');
+    d.innerHTML=`<div class="dlg-box" role="alertdialog"><p>${esc(msg)}</p><div class="btns"><button class="btn ${danger===false?'primary':'danger'}" data-ok>${esc(ok||'تأكيد')}</button><button class="btn" data-no>إلغاء</button></div></div>`;
+    d.hidden=false;
+    d.onclick=ev=>{if(ev.target.closest('[data-ok]')){d.hidden=true;res(true);}else if(ev.target.closest('[data-no]')||ev.target===d){d.hidden=true;res(false);}};});
+}
+const sheetHead=t=>`<div class="sheet-h"><h3>${t}</h3><button class="x" data-close aria-label="إغلاق">${icon('x')}</button></div>`;
+
+/* ---------- Entry form ---------- */
+let F=null;
+function openForm(opts){
+  opts=opts||{};
+  const e=opts.entry;
+  if(e)F=Object.assign({},e);
+  else{
+    const act=opts.act||'hifz';
+    F={id:null,act,date:selDate>todayStr()?todayStr():selDate,unit:act==='istima'?'none':(S.prefs.lastUnit[act]||'page'),surah:null,from:null,to:null,amount:null,minutes:null,mastery:null,note:''};
+    if(opts.prefill)Object.assign(F,opts.prefill);
+  }
+  drawForm();
+}
+function drawForm(){
+  const A=ACTS[F.act],u=F.unit;
+  const unitTabs=UNIT_TABS.concat(F.act==='istima'?[['none','دون مقدار']]:[]);
+  if(F.act!=='istima'&&u==='none')F.unit='page';
+  const num=(id,v,min,max,ph)=>`<input class="inp" id="${id}" type="number" inputmode="numeric" min="${min}" ${max?`max="${max}"`:''} value="${v==null?'':v}" placeholder="${ph||''}">`;
+  const surahSel=`<select class="inp" id="fSurah"><option value="">— اختر السورة —</option>${SURAHS.map(s=>`<option value="${s.n}" ${F.surah===s.n?'selected':''}>${s.n}. ${s.name} (${s.ayat} آية)</option>`).join('')}</select>`;
+  let loc='';
+  if(F.unit==='ayah')loc=`<div class="f-grid"><div class="full"><label class="lbl" for="fSurah">السورة</label>${surahSel}</div><div><label class="lbl" for="fFrom">من آية</label>${num('fFrom',F.from,1,F.surah?SURAHS[F.surah-1].ayat:286)}</div><div><label class="lbl" for="fTo">إلى آية</label>${num('fTo',F.to,1,F.surah?SURAHS[F.surah-1].ayat:286)}</div></div>`;
+  else if(F.unit==='page')loc=`<div class="f-grid"><div><label class="lbl" for="fFrom">من صفحة</label>${num('fFrom',F.from,1,MAX_PAGE)}</div><div><label class="lbl" for="fTo">إلى صفحة</label>${num('fTo',F.to,1,MAX_PAGE)}</div><div class="full"><label class="lbl" for="fSurah">السورة <small>(اختياري)</small></label>${surahSel}</div></div><p class="hint">ترقيم الصفحات بحسب مصحف المدينة النبوية (${MAX_PAGE} صفحة).</p>`;
+  else if(F.unit==='juz')loc=`<div class="f-grid"><div><label class="lbl" for="fFrom">من جزء</label>${num('fFrom',F.from,1,MAX_JUZ)}</div><div><label class="lbl" for="fTo">إلى جزء</label>${num('fTo',F.to,1,MAX_JUZ)}</div></div>`;
+  const ranged=rangeAmount()!=null;
+  openSheet(`${sheetHead(F.id?'تعديل الإنجاز':'تسجيل إنجاز جديد')}
+  <div class="f-sec"><span class="lbl">النشاط</span><div class="picks">${GRID_ORDER.map(k=>`<button class="pick" data-pick="${k}" aria-pressed="${F.act===k}" style="--c:${ACTS[k].color}">${icon(ACTS[k].icon)}${ACTS[k].name}</button>`).join('')}</div></div>
+  <div class="f-sec"><label class="lbl" for="fDate">التاريخ</label><input class="inp" type="date" id="fDate" value="${F.date}" max="${todayStr()}"></div>
+  ${F.act==='istima'?`<div class="f-sec"><label class="lbl" for="fMin">مدة الاستماع بالدقائق</label><input class="inp" id="fMin" type="number" inputmode="decimal" min="0" step="any" value="${F.minutes==null?'':F.minutes}" placeholder="مثال: 20"></div>`:''}
+  <div class="f-sec"><span class="lbl">${F.act==='istima'?'المقدار المسموع <small>(اختياري)</small>':'طريقة وصف المقدار'}</span><div class="seg" id="fUnit">${unitTabs.map(([k,n])=>`<button data-unit="${k}" aria-pressed="${F.unit===k}">${n}</button>`).join('')}</div></div>
+  ${F.unit!=='none'?`<div class="f-sec"><span class="lbl">الموضع <small>(اختياري، ويلزم لقائمة التثبيت)</small></span>${loc}</div>
+  <div class="f-sec"><label class="lbl" for="fAmt">المقدار (${UNITS[F.unit][1]})</label><input class="inp" id="fAmt" type="number" inputmode="decimal" min="0" step="any" value="${F.amount==null?'':F.amount}" ${ranged?'readonly':''} placeholder="مثال: 2"><p class="hint" id="fAmtHint">${ranged?'يُحسب تلقائيا من النطاق المحدد.':'اكتب المقدار، أو حدد النطاق ليُحسب تلقائيا. يمكن إدخال كسور مثل 0.5.'}</p></div>`:''}
+  ${A.mastery?`<div class="f-sec"><span class="lbl">مستوى الإتقان <small>(تقديرك الشخصي، اختياري)</small></span><div class="seg mastery" id="fMastery">${[['mutqan','متقن'],['jayyid','جيد'],['weak','يحتاج تثبيتا']].map(([k,n])=>`<button data-m="${k}" aria-pressed="${F.mastery===k}">${n}</button>`).join('')}</div></div>`:''}
+  <div class="f-sec"><label class="lbl" for="fNote">ملاحظاتي <small>(اختياري)</small></label><textarea class="inp" id="fNote" maxlength="1000" placeholder="مثال: أخطاء في الآيات المتشابهة">${esc(F.note||'')}</textarea></div>
+  <div class="err" id="fErr"></div>
+  <div class="btns"><button class="btn primary" id="fSave">حفظ</button>${F.id?`<button class="btn danger" id="fDel">${icon('trash')}حذف</button>`:''}<button class="btn" data-close>إلغاء</button></div>`);
+  bindForm();
+}
+const intOrNull=v=>{if(v===''||v==null)return null;const n=Number(v);return Number.isFinite(n)?n:NaN;};
+function rangeAmount(){
+  const f=F.from,t=F.to;
+  if(!Number.isInteger(f)||!Number.isInteger(t)||f<1||t<f)return null;
+  if(F.unit==='ayah'&&!F.surah)return null;
+  return t-f+1;
+}
+function readForm(){
+  const v=id=>{const el=$('#'+id);return el?el.value:null;};
+  F.date=v('fDate')||F.date;
+  if($('#fSurah'))F.surah=v('fSurah')?+v('fSurah'):null;
+  if($('#fFrom'))F.from=intOrNull(v('fFrom'));
+  if($('#fTo'))F.to=intOrNull(v('fTo'));
+  if($('#fAmt'))F.amount=intOrNull(v('fAmt'));
+  if($('#fMin'))F.minutes=intOrNull(v('fMin'));
+  F.note=(v('fNote')||'').trim();
+}
+function bindForm(){
+  const sh=$('#sheet');
+  sh.querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>{readForm();const was=F.act;F.act=b.dataset.pick;if(!ACTS[F.act].mastery)F.mastery=null;
+    if(F.act==='istima'&&was!=='istima'&&!F.id&&F.amount==null&&F.from==null)F.unit='none';
+    if(was==='istima'&&F.act!=='istima'){F.minutes=null;if(F.unit==='none')F.unit=S.prefs.lastUnit[F.act]||'page';}
+    drawForm();});
+  sh.querySelectorAll('[data-unit]').forEach(b=>b.onclick=()=>{readForm();if(F.unit!==b.dataset.unit){F.unit=b.dataset.unit;F.from=F.to=null;F.amount=null;}drawForm();});
+  sh.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{F.mastery=F.mastery===b.dataset.m?null:b.dataset.m;sh.querySelectorAll('[data-m]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.m===F.mastery));});
+  const upd=()=>{readForm();const a=rangeAmount(),amt=$('#fAmt');if(!amt)return;
+    if(a!=null){amt.value=a;F.amount=a;amt.readOnly=true;$('#fAmtHint').textContent='يُحسب تلقائيا من النطاق المحدد.';}
+    else{amt.readOnly=false;$('#fAmtHint').textContent='اكتب المقدار، أو حدد النطاق ليُحسب تلقائيا. يمكن إدخال كسور مثل 0.5.';}};
+  ['fFrom','fTo'].forEach(id=>{const el=$('#'+id);if(el)el.addEventListener('input',upd);});
+  const ss=$('#fSurah');if(ss)ss.addEventListener('change',()=>{upd();if(F.unit==='ayah'){const mx=F.surah?SURAHS[F.surah-1].ayat:286;['fFrom','fTo'].forEach(id=>$('#'+id).max=mx);}});
+  $('#fSave').onclick=submitForm;
+  const d=$('#fDel');if(d)d.onclick=()=>deleteEntry(F.id,true);
+}
+function validate(){
+  const t=todayStr();
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(F.date))return 'اختر تاريخا صحيحا.';
+  if(F.date>t)return 'لا يمكن تسجيل إنجاز بتاريخ لاحق لليوم.';
+  for(const k of ['from','to','amount','minutes'])if(Number.isNaN(F[k]))return 'تحقق من الأرقام المدخلة.';
+  if(F.unit!=='none'){
+    const hasF=F.from!=null,hasT=F.to!=null;
+    if(hasF||hasT){
+      if(!(hasF&&hasT))return 'أكمل بداية النطاق ونهايته، أو اتركهما فارغين.';
+      if(!Number.isInteger(F.from)||!Number.isInteger(F.to)||F.from<1)return 'بداية النطاق ونهايته يجب أن تكونا أعدادا صحيحة موجبة.';
+      if(F.to<F.from)return 'نهاية النطاق يجب ألا تكون قبل بدايته.';
+      if(F.unit==='ayah'){if(!F.surah)return 'اختر السورة لتحديد نطاق الآيات.';const mx=SURAHS[F.surah-1].ayat;if(F.to>mx)return `سورة ${SURAHS[F.surah-1].name} عدد آياتها ${mx}.`;}
+      if(F.unit==='page'&&F.to>MAX_PAGE)return `أرقام الصفحات من 1 إلى ${MAX_PAGE}.`;
+      if(F.unit==='juz'&&F.to>MAX_JUZ)return `أرقام الأجزاء من 1 إلى ${MAX_JUZ}.`;
+    }
+    const a=rangeAmount();if(a!=null)F.amount=a;
+  }
+  if(F.act==='istima'){
+    if(!(F.minutes>0)&&!(F.unit!=='none'&&F.amount>0))return 'اكتب مدة الاستماع بالدقائق، أو مقدار ما استمعت إليه.';
+  }else if(!(F.amount>0))return 'اكتب المقدار المنجز (أكبر من صفر).';
+  if(F.mastery==='weak'&&!locKey(F))return 'لإضافة المقطع إلى قائمة التثبيت حدد موضعه: السورة ونطاق الآيات، أو نطاق الصفحات، أو الأجزاء.';
+  return null;
+}
+async function submitForm(){
+  readForm();
+  const err=validate();
+  if(err){$('#fErr').textContent=err;$('#fErr').scrollIntoView({block:'nearest',behavior:'smooth'});return;}
+  const e={id:F.id||uid(),date:F.date,act:F.act,unit:F.unit,
+    amount:F.unit==='none'?0:(F.amount||0),minutes:F.act==='istima'?(F.minutes||0):0,
+    surah:F.unit==='juz'||F.unit==='none'?null:F.surah,from:F.unit==='none'?null:F.from,to:F.unit==='none'?null:F.to,
+    mastery:ACTS[F.act].mastery?F.mastery:null,note:F.note.slice(0,1000),createdAt:F.createdAt||Date.now()};
+  if(F.id){e.updatedAt=Date.now();const i=S.entries.findIndex(x=>x.id===F.id);if(i>=0)S.entries[i]=e;else S.entries.push(e);}
+  else S.entries.push(e);
+  let msg=F.id?'تم حفظ التعديل':'تم حفظ الإنجاز';
+  const k=locKey(e);
+  if(e.mastery==='weak'&&k){const s=S.segments.find(x=>x.key===k);
+    if(!s){S.segments.push({key:k,status:'open',createdAt:Date.now()});msg+='، وأُضيف المقطع إلى قائمة التثبيت';}
+    else if(s.status!=='open'){s.status='open';delete s.resolvedAt;msg+='، وأُعيد المقطع إلى قائمة التثبيت';}}
+  cleanupSegments();
+  if(e.unit!=='none'&&e.act!=='istima'){S.prefs.lastUnit[e.act]=e.unit;savePrefs();}
+  await save();closeSheet();renderAll();toast(msg);
+}
+async function deleteEntry(id,fromForm){
+  const e=S.entries.find(x=>x.id===id);if(!e)return;
+  if(!await ask(`حذف تسجيل «${ACTS[e.act].name}» بتاريخ ${fmtShort(e.date)}؟ لا يمكن التراجع عن الحذف.`,'حذف'))return;
+  S.entries=S.entries.filter(x=>x.id!==id);cleanupSegments();await save();if(fromForm)closeSheet();renderAll();toast('تم حذف التسجيل');
+}
+
+/* ---------- Backup ---------- */
+function exportData(){
+  const data={app:'mutabaati-quran',version:1,exportedAt:new Date().toISOString(),entries:S.entries,segments:S.segments};
+  const txt=JSON.stringify(data);
+  try{const b=new Blob([txt],{type:'application/json'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=`mutabaati-quran-${todayStr()}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),5000);}catch(e){}
+  S.prefs.lastBackup=new Date().toISOString();savePrefs();renderBackup();
+  openSheet(`${sheetHead('تصدير نسخة احتياطية')}
+  <p>يُنزَّل الآن ملف باسم <b dir="ltr">mutabaati-quran-${todayStr()}.json</b> يضم ${cnt(S.entries.length,'rec')}. إن لم يبدأ التنزيل في متصفحك، انسخ النص التالي واحفظه في ملف نصي، أو أرسله إلى نفسك.</p>
+  <textarea class="inp json" id="expTxt" readonly>${esc(txt)}</textarea>
+  <p class="hint">قد يحتوي الملف ملاحظاتك الشخصية، فاحفظه في مكان آمن.</p>
+  <div class="btns"><button class="btn primary" id="cpBtn">${icon('copy')}نسخ النص</button><button class="btn" data-close>تم</button></div>`);
+  $('#cpBtn').onclick=async()=>{const ta=$('#expTxt');try{await navigator.clipboard.writeText(ta.value);toast('تم النسخ');}catch(e){ta.focus();ta.select();try{document.execCommand('copy');toast('تم النسخ');}catch(e2){toast('حدد النص وانسخه يدويا');}}};
+}
+function cleanEntry(e){
+  if(!e||typeof e!=='object')return null;
+  if(typeof e.id!=='string'||!e.id||e.id.length>64)return null;
+  if(typeof e.date!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(e.date)||isNaN(parse(e.date)))return null;
+  if(!ACTS[e.act])return null;
+  const num=v=>typeof v==='number'&&isFinite(v)&&v>=0?v:0;
+  const pos=v=>Number.isInteger(v)&&v>0?v:null;
+  const r={id:e.id,date:e.date,act:e.act,unit:['ayah','page','juz','none'].includes(e.unit)?e.unit:'none',
+    amount:num(e.amount),minutes:num(e.minutes),surah:pos(e.surah)&&e.surah<=114?e.surah:null,from:pos(e.from),to:pos(e.to),
+    mastery:MASTERY[e.mastery]&&ACTS[e.act].mastery?e.mastery:null,note:typeof e.note==='string'?e.note.slice(0,1000):'',
+    createdAt:typeof e.createdAt==='number'?e.createdAt:Date.now()};
+  if(r.from&&r.to&&r.to<r.from)r.from=r.to=null;
+  if(typeof e.updatedAt==='number')r.updatedAt=e.updatedAt;
+  return r;
+}
+function parseBackup(txt){
+  let o;try{o=JSON.parse(txt);}catch(e){return{err:'تعذرت قراءة الملف: ليس بصيغة JSON صحيحة.'};}
+  if(!o||o.app!=='mutabaati-quran'||!Array.isArray(o.entries))return{err:'هذا الملف ليس نسخة احتياطية من «متابعتي مع القرآن».'};
+  if(typeof o.version!=='number'||o.version>1)return{err:'أُنشئ هذا الملف بإصدار أحدث من الصفحة أو إصدار غير معروف.'};
+  const entries=[],seen=new Set();let bad=0;
+  o.entries.forEach(x=>{const c=cleanEntry(x);if(c&&!seen.has(c.id)){seen.add(c.id);entries.push(c);}else bad++;});
+  const segments=(Array.isArray(o.segments)?o.segments:[]).filter(s=>s&&typeof s.key==='string'&&/^[apj](\|\d+){2,3}$/.test(s.key)).map(s=>({key:s.key,status:s.status==='resolved'?'resolved':'open',createdAt:typeof s.createdAt==='number'?s.createdAt:Date.now()}));
+  return{entries,segments,bad,exportedAt:o.exportedAt};
+}
+function openImport(){
+  openSheet(`${sheetHead('استيراد نسخة احتياطية')}
+  <p>اختر ملف النسخة الاحتياطية (.json)، أو الصق محتواه في الخانة.</p>
+  <input class="inp" type="file" id="impFile" accept=".json,application/json,text/plain">
+  <textarea class="inp json" id="impTxt" placeholder="أو الصق محتوى الملف هنا" style="margin-top:8px;min-height:100px"></textarea>
+  <div class="err" id="impErr"></div><div id="impRes"></div>
+  <div class="btns" id="impBtns"><button class="btn primary" id="impCheck">فحص البيانات</button><button class="btn" data-close>إلغاء</button></div>`);
+  $('#impFile').onchange=ev=>{const f=ev.target.files[0];if(!f)return;if(f.size>20e6){$('#impErr').textContent='الملف كبير جدا.';return;}
+    const r=new FileReader();r.onload=()=>{$('#impTxt').value=r.result;checkImport();};r.onerror=()=>{$('#impErr').textContent='تعذرت قراءة الملف.';};r.readAsText(f);};
+  $('#impCheck').onclick=checkImport;
+}
+function checkImport(){
+  $('#impErr').textContent='';$('#impRes').innerHTML='';
+  const txt=$('#impTxt').value.trim();if(!txt){$('#impErr').textContent='اختر ملفا أو الصق محتواه أولا.';return;}
+  const r=parseBackup(txt);if(r.err){$('#impErr').textContent=r.err;return;}
+  const ids=new Set(S.entries.map(e=>e.id));const fresh=r.entries.filter(e=>!ids.has(e.id));
+  $('#impRes').innerHTML=`<div class="method" style="font-size:14.5px;color:#26302b"><b>نتيجة الفحص:</b><br>الملف سليم ويحتوي ${cnt(r.entries.length,'rec')}${r.exportedAt?`، صُدِّر في ${esc(fmtShort(ymd(new Date(r.exportedAt))))}`:''}.<br>
+  منها ${cnt(fresh.length,'rec')} غير موجودة على هذا الجهاز، و${cnt(r.entries.length-fresh.length,'rec')} موجودة مسبقا لن تُكرر.${r.bad?`<br>تُجاهَل ${cnt(r.bad,'rec')} غير صالحة أو مكررة في الملف.`:''}<br><br>
+  <b>دمج:</b> يضيف الجديدة فقط ويبقي بياناتك الحالية.<br><b>استبدال:</b> يحذف بيانات هذا الجهاز (${cnt(S.entries.length,'rec')}) ويضع بيانات الملف مكانها.</div>`;
+  $('#impBtns').innerHTML=`<button class="btn primary" id="impMerge">دمج</button><button class="btn danger" id="impReplace">استبدال</button><button class="btn" data-close>إلغاء</button>`;
+  $('#impMerge').onclick=async()=>{
+    S.entries=S.entries.concat(fresh);
+    r.segments.forEach(s=>{const ex=S.segments.find(x=>x.key===s.key);if(!ex)S.segments.push(s);else if(s.status==='open')ex.status='open';});
+    cleanupSegments();await save();closeSheet();renderAll();toast(`تم دمج ${cnt(fresh.length,'rec')}`);};
+  $('#impReplace').onclick=async()=>{
+    if(!await ask(`سيُحذف ما على هذا الجهاز (${cnt(S.entries.length,'rec')}) ويُستبدل بمحتوى الملف. هل تريد المتابعة؟`,'استبدال'))return;
+    S.entries=r.entries;S.segments=r.segments;cleanupSegments();await save();closeSheet();renderAll();toast('تم استبدال البيانات بمحتوى الملف');};
+}
+
+/* ---------- More / settings ---------- */
+function openMore(){
+  const modeTxt={idb:'قاعدة IndexedDB داخل هذا المتصفح',ls:'التخزين المحلي (localStorage) لهذا المتصفح',memory:'الذاكرة المؤقتة فقط (لا يتيح المتصفح الحفظ هنا)'}[Store.mode];
+  openSheet(`${sheetHead('المزيد')}
+  <h4 class="sub">عن الصفحة</h4>
+  <p class="info">«متابعتي مع القرآن» أداة شخصية لتوثيق إنجازك في الحفظ والمراجعة والتثبيت والتلاوة والاستماع والقراءة على شخص. لا تختبرك ولا تقيّم حفظك آليا، ولا تفرض عليك أهدافا. ومستوى الإتقان فيها تقدير شخصي تدخله بنفسك.</p>
+  <h4 class="sub">بيان الخصوصية</h4>
+  <ul class="info"><li>لا تحتاج الصفحة إلى حساب، ولا تُرسل تسجيلاتك إلى أي خادم.</li><li>تُحفظ بياناتك في: <b>${modeTxt}</b>.</li>
+  <li>الحفظ المحلي ليس ضمانا مطلقا: قد تُطّلع البيانات على جهاز مشترك، وقد تضيع بفقد الجهاز أو مسح بيانات المتصفح أو في وضع التصفح الخاص.</li>
+  <li>لنقل بياناتك إلى جهاز آخر استخدم التصدير ثم الاستيراد.</li></ul>
+  <h4 class="sub">إدارة البيانات</h4>
+  <div class="btns"><button class="btn" data-action="export">${icon('download')}تصدير</button><button class="btn" data-action="import">${icon('upload')}استيراد</button></div>
+  <div class="btns"><button class="btn danger" id="wipeBtn">${icon('trash')}حذف جميع البيانات من هذا الجهاز</button></div>
+  <h4 class="sub">إضافة الصفحة إلى الشاشة الرئيسية</h4>
+  <ul class="info"><li>آيفون (Safari): زر المشاركة ← «إضافة إلى الشاشة الرئيسية».</li><li>أندرويد (Chrome): القائمة ⋮ ← «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».</li></ul>
+  <p class="hint">الإصدار 0.2.0 · إعداد: جعفر النقبي</p>`);
+  $('#wipeBtn').onclick=async()=>{
+    if(!S.entries.length){toast('لا توجد بيانات');return;}
+    if(!await ask(`سيُحذف ${cnt(S.entries.length,'rec')} وكل الملاحظات وقائمة التثبيت من هذا الجهاز. يُنصح بالتصدير أولا. هل تريد الحذف؟`,'حذف الكل'))return;
+    S.entries=[];S.segments=[];await save();closeSheet();renderAll();toast('تم حذف جميع البيانات');};
+}
+
+/* ---------- Events ---------- */
+function setDate(d){const t=todayStr();selDate=d>t?t:d;syncCal();renderAll();}
+function openAcc(name,scroll){S.prefs.open[name]=true;savePrefs();renderAccState();if(scroll){const el=document.querySelector(`[data-acc="${name}"]`);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}}
+
+document.addEventListener('click',async ev=>{
+  const t=ev.target;
+  const act=t.closest('[data-action]');
+  if(act){ev.stopPropagation();if(act.dataset.action==='export')exportData();else openImport();return;}
+  const head=t.closest('.acc-head');
+  if(head){const n=head.parentElement.dataset.acc;S.prefs.open[n]=!S.prefs.open[n];savePrefs();renderAccState();return;}
+  const oa=t.closest('[data-open-act]');if(oa){openForm({act:oa.dataset.openAct});return;}
+  const ed=t.closest('[data-edit]');if(ed){const e=S.entries.find(x=>x.id===ed.dataset.edit);if(e)openForm({entry:e});return;}
+  const dl=t.closest('[data-del]');if(dl){deleteEntry(dl.dataset.del,false);return;}
+  const dy=t.closest('[data-day]');if(dy){setDate(dy.dataset.day);return;}
+  const cl=t.closest('[data-cal]');if(cl){calM+=+cl.dataset.cal;if(calM<0){calM=11;calY--;}if(calM>11){calM=0;calY++;}renderCalendar();return;}
+  const st=t.closest('[data-stat]');if(st){statTab=st.dataset.stat;renderStats();return;}
+  const wl=t.closest('[data-weak-log]');if(wl){openForm({act:'tathbit',prefill:keyToLoc(wl.dataset.weakLog)});return;}
+  const wr=t.closest('[data-weak-resolve]');if(wr){
+    if(!await ask(`إزالة «${keyLabel(wr.dataset.weakResolve)}» من قائمة التثبيت؟ تبقى تسجيلاته السابقة في السجل.`,'إزالة الوسم',false))return;
+    const s=S.segments.find(x=>x.key===wr.dataset.weakResolve);if(s){s.status='resolved';s.resolvedAt=Date.now();}await save();renderAll();toast('أُزيل المقطع من قائمة التثبيت');return;}
+  const nv=t.closest('[data-nav]');if(nv){const n=nv.dataset.nav;
+    $$('.bnav button').forEach(b=>b.classList.toggle('on',b===nv));
+    if(n==='home')window.scrollTo({top:0,behavior:'smooth'});
+    else if(n==='add')openForm({});
+    else if(n==='log')openAcc('log',true);
+    else if(n==='calendar')openAcc('calendar',true);
+    else openMore();
+    if(n==='add'||n==='more')setTimeout(()=>$$('.bnav button').forEach(b=>b.classList.toggle('on',b.dataset.nav==='home')),300);
+    return;}
+});
+document.addEventListener('keydown',ev=>{
+  if((ev.key==='Enter'||ev.key===' ')&&ev.target.classList&&ev.target.classList.contains('acc-head')){ev.preventDefault();ev.target.click();}
+  if(ev.key==='Escape'){if(!$('#dlg').hidden)$('#dlg').querySelector('[data-no]').click();else if(!$('#sheetLayer').hidden)closeSheet();}
+});
+$('#ctaBtn').onclick=()=>openForm({});
+$('#btnSettings').onclick=openMore;
+$('#prevDay').onclick=()=>setDate(addDays(selDate,-1));
+$('#nextDay').onclick=()=>setDate(addDays(selDate,1));
+$('#todayBtn').onclick=()=>setDate(todayStr());
+$('#datePicker').addEventListener('change',e=>{if(/^\d{4}-\d{2}-\d{2}$/.test(e.target.value))setDate(e.target.value);});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState!=='visible')return;const t=todayStr();if(t!==lastToday){if(selDate===lastToday)selDate=t;lastToday=t;syncCal();renderAll();}});
+
+/* ---------- Boot ---------- */
+(async function boot(){
+  renderStatic();syncCal();
+  try{await Store.init();
+    const d=await Store.get('data');if(d&&Array.isArray(d.entries)){S.entries=d.entries.map(cleanEntry).filter(Boolean);S.segments=Array.isArray(d.segments)?d.segments:[];}
+    const p=await Store.get('prefs');if(p&&typeof p==='object'){Object.assign(S.prefs,p);S.prefs.open=S.prefs.open||{today:true};S.prefs.lastUnit=S.prefs.lastUnit||{};}
+  }catch(e){}
+  renderStorageWarn();renderAccState();renderAll();
+  try{if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});}catch(e){}
+})();
+})();
+</script>
+</body>
+</html>
