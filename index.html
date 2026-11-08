@@ -261,8 +261,6 @@ textarea.json{direction:ltr;text-align:left;font-family:ui-monospace,Menlo,monos
 
   <button class="cta" id="ctaBtn"><span>تسجيل إنجاز جديد</span><span id="ctaIc"></span></button>
 
-  <div class="card acts" id="acts"></div>
-
   <a class="card xlink" href="https://jafaralnaqbi.github.io/umruhu/" rel="noopener">
     <span class="xi"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M18 8h28M18 56h28"/><path d="M21 8c0 12 9 16 11 24-2 8-11 12-11 24h22c0-12-9-16-11-24 2-8 11-12 11-24"/><path d="M26 50c2-4 4-6 6-7 2 1 4 3 6 7z" fill="currentColor" stroke="none"/></svg></span>
     <span class="xt"><b>عمره فيما أفناه</b><small>محاسبة النفس ومتابعة العبادات والعادات</small></span>
@@ -486,7 +484,6 @@ function renderStatic(){
   $('#todayIc').innerHTML=icon('check','ic');
   $$('[data-ic]').forEach(el=>{el.outerHTML=icon(el.dataset.ic,el.classList.contains('icw')?'ic':'');});
   $$('.chevw').forEach(el=>{el.outerHTML=icon('chevR','chev');});
-  $('#acts').innerHTML=GRID_ORDER.map(k=>`<button class="act" data-open-act="${k}" style="--c:${ACTS[k].color}">${icon(ACTS[k].icon)}<span>${ACTS[k].name}</span></button>`).join('');
   $('#backupBadge').outerHTML=`<span id="backupBadge"></span><span class="pill green" data-action="export">${icon('download')}تصدير</span><span class="pill blue" data-action="import">${icon('upload')}استيراد</span>`;
 }
 function renderAccState(){$$('.acc').forEach(a=>a.classList.toggle('open',!!S.prefs.open[a.dataset.acc]));$$('.acc-head').forEach(h=>h.setAttribute('aria-expanded',h.parentElement.classList.contains('open')));}
