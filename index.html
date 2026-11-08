@@ -92,6 +92,9 @@ svg{flex:none}
 .acc.today .acc-head .ic,.acc.today .acc-head .chev{color:#fff}
 .acc.today .acc-head .ic{background:#ffffff26;border-radius:9px;padding:3px}
 .acc.today.open .acc-body{padding-top:10px}
+.acc.today .acc-head{padding:10px 14px;font-size:17px;gap:10px}
+.acc.today .acc-head .ic{width:24px;height:24px}
+.acc.today .acc-head .chev{width:20px;height:20px}
 .badge{font-size:14px;font-weight:700;padding:4px 12px;border-radius:10px;white-space:nowrap}
 .badge.red{background:var(--redbg);color:var(--red)}
 .badge.amber{background:#fff1d6;color:#8a5800}
@@ -272,11 +275,6 @@ textarea.json{direction:ltr;text-align:left;font-family:ui-monospace,Menlo,monos
     <div class="acc-body" id="todayBody"></div>
   </section>
 
-  <section class="card acc" data-acc="calendar" id="secCalendar">
-    <div class="acc-head" role="button" tabindex="0"><span class="icw" data-ic="calCheck"></span><span class="ttl">تقويم الإنجاز</span><span class="chevw"></span></div>
-    <div class="acc-body" id="calBody"></div>
-  </section>
-
   <section class="card acc" data-acc="stats">
     <div class="acc-head" role="button" tabindex="0"><span class="icw" data-ic="chart"></span><span class="ttl">الإحصائية</span><span class="chevw"></span></div>
     <div class="acc-body" id="statsBody"></div>
@@ -303,7 +301,7 @@ textarea.json{direction:ltr;text-align:left;font-family:ui-monospace,Menlo,monos
     <button class="on" data-nav="home"><span data-ic="home"></span>الرئيسية</button>
     <button data-nav="add"><span data-ic="plus"></span>تسجيل</button>
     <button data-nav="log"><span data-ic="list"></span>السجل</button>
-    <button data-nav="calendar"><span data-ic="calendar"></span>التقويم</button>
+    <button data-nav="stats"><span data-ic="chart"></span>الإحصائية</button>
     <button data-nav="more"><span data-ic="more"></span>المزيد</button>
   </div>
 </nav>
@@ -484,7 +482,6 @@ function renderStatic(){
   $('#todayIc').innerHTML=icon('check','ic');
   $$('[data-ic]').forEach(el=>{el.outerHTML=icon(el.dataset.ic,el.classList.contains('icw')?'ic':'');});
   $$('.chevw').forEach(el=>{el.outerHTML=icon('chevR','chev');});
-  $('#backupBadge').outerHTML=`<span id="backupBadge"></span><span class="pill green" data-action="export">${icon('download')}تصدير</span><span class="pill blue" data-action="import">${icon('upload')}استيراد</span>`;
 }
 function renderAccState(){$$('.acc').forEach(a=>a.classList.toggle('open',!!S.prefs.open[a.dataset.acc]));$$('.acc-head').forEach(h=>h.setAttribute('aria-expanded',h.parentElement.classList.contains('open')));}
 
@@ -599,7 +596,7 @@ function renderStorageWarn(){
   if(Store.mode==='memory'){w.textContent='تنبيه: هذا المتصفح لا يسمح بالحفظ المحلي هنا، فستضيع التسجيلات عند إغلاق الصفحة. صدّر نسخة احتياطية قبل الخروج.';w.classList.remove('hidden');}
   else w.classList.add('hidden');
 }
-function renderAll(){renderDate();renderToday();renderCalendar();renderStats();renderWeak();renderLog();renderBackup();}
+function renderAll(){renderDate();renderToday();renderStats();renderWeak();renderLog();renderBackup();}
 
 /* ---------- Sheet / dialog / toast ---------- */
 let toastT;
@@ -846,7 +843,7 @@ document.addEventListener('click',async ev=>{
     if(n==='home')window.scrollTo({top:0,behavior:'smooth'});
     else if(n==='add')openForm({});
     else if(n==='log')openAcc('log',true);
-    else if(n==='calendar')openAcc('calendar',true);
+    else if(n==='stats')openAcc('stats',true);
     else openMore();
     if(n==='add'||n==='more')setTimeout(()=>$$('.bnav button').forEach(b=>b.classList.toggle('on',b.dataset.nav==='home')),300);
     return;}
