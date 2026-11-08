@@ -61,9 +61,9 @@ svg{flex:none}
 .today-btn{font-size:14px;font-weight:700;color:var(--g);padding:6px 10px;border-radius:10px;background:var(--g3)}
 
 /* Main CTA */
-.cta{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;margin-top:12px;padding:17px 16px;border-radius:var(--r);
-  background:linear-gradient(180deg,#2c8753,#1c5f37);color:#fff;font-size:25px;font-weight:800;box-shadow:0 6px 18px #1f6b3f40,inset 0 1px 0 #ffffff30}
-.cta svg{width:34px;height:34px}
+.cta{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;margin-top:10px;padding:12px 14px;border-radius:var(--r);
+  background:linear-gradient(180deg,#2c8753,#1c5f37);color:#fff;font-size:20px;font-weight:800;box-shadow:0 6px 18px #1f6b3f40,inset 0 1px 0 #ffffff30}
+.cta svg{width:26px;height:26px}
 .cta:active{transform:translateY(1px)}
 
 .xlink{display:flex;align-items:center;gap:12px;margin-top:10px;padding:13px 14px;text-decoration:none;color:inherit}
@@ -293,7 +293,7 @@ textarea.json{direction:ltr;text-align:left;font-family:ui-monospace,Menlo,monos
   </section>
 
   <section class="card acc" data-acc="backup" id="secBackup">
-    <div class="acc-head" role="button" tabindex="0"><span class="icw" data-ic="db"></span><span class="ttl">النسخة الاحتياطية للبيانات</span><span id="backupBadge"></span><span class="chevw"></span></div>
+    <div class="acc-head" role="button" tabindex="0"><span class="icw" data-ic="db"></span><span class="ttl">النسخة الاحتياطية</span><span id="backupBadge"></span><span class="chevw"></span></div>
     <div class="acc-body" id="backupBody"></div>
   </section>
 </div>
@@ -411,7 +411,7 @@ const Store=(function(){
 })();
 
 /* ---------- State ---------- */
-const S={entries:[],segments:[],prefs:{open:{today:true},lastBackup:null,lastUnit:{}}};
+const S={entries:[],segments:[],prefs:{open:{},lastBackup:null,lastUnit:{}}};
 let selDate=todayStr(),lastToday=selDate,calY,calM,statTab='week',logAct='all',logMonth='',logLimit=40;
 const syncCal=()=>{const d=parse(selDate);calY=d.getFullYear();calM=d.getMonth();};
 const save=()=>Store.set('data',{entries:S.entries,segments:S.segments});
@@ -868,7 +868,7 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState!==
   renderStatic();syncCal();
   try{await Store.init();
     const d=await Store.get('data');if(d&&Array.isArray(d.entries)){S.entries=d.entries.map(cleanEntry).filter(Boolean);S.segments=Array.isArray(d.segments)?d.segments:[];}
-    const p=await Store.get('prefs');if(p&&typeof p==='object'){Object.assign(S.prefs,p);S.prefs.open=S.prefs.open||{today:true};S.prefs.lastUnit=S.prefs.lastUnit||{};}
+    const p=await Store.get('prefs');if(p&&typeof p==='object'){Object.assign(S.prefs,p);S.prefs.open={};S.prefs.lastUnit=S.prefs.lastUnit||{};}
   }catch(e){}
   renderStorageWarn();renderAccState();renderAll();
   try{if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});}catch(e){}
