@@ -193,8 +193,8 @@ textarea.inp{min-height:84px;resize:vertical}
 .pick{display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 3px;border-radius:12px;border:1.5px solid var(--line);background:#fff;font-weight:700;font-size:13.5px;line-height:1.25;text-align:center}
 .pick svg{width:24px;height:24px;color:var(--c)}
 .pick[aria-pressed="true"]{border-color:var(--g);background:var(--g3);box-shadow:inset 0 0 0 1px var(--g)}
-.seg{display:flex;flex-wrap:wrap;gap:6px}
-.seg button{flex:1 1 auto;padding:9px 10px;border-radius:11px;border:1.5px solid var(--line);background:#fff;font-weight:700;font-size:15px}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.seg button{padding:9px 10px;border-radius:11px;border:1.5px solid var(--line);background:#fff;font-weight:700;font-size:15px}
 .seg button[aria-pressed="true"]{border-color:var(--g);background:var(--g3);color:var(--g)}
 .seg.mastery button[data-m="weak"][aria-pressed="true"]{border-color:var(--red);background:var(--redbg);color:var(--red)}
 .err{color:var(--red);font-weight:700;font-size:14.5px;margin-top:12px;min-height:0}
@@ -367,8 +367,12 @@ const ACTS={
 };
 const ACT_KEYS=['hifz','muraja','tathbit','tilawa','qiraa','istima'];
 const GRID_ORDER=['hifz','muraja','istima','tathbit','tilawa','qiraa'];
-const UNITS={ayah:['آية','آيات'],page:['صفحة','صفحات'],juz:['جزء','أجزاء'],min:['دقيقة','دقائق'],rec:['تسجيل','تسجيلات'],seg:['مقطع','مقاطع'],day:['يوم','أيام']};
-const UNIT_TABS=[['page','صفحات'],['ayah','آيات'],['juz','أجزاء']];
+const UNITS={ayah:['آية','آيات'],page:['صفحة','صفحات'],juz:['جزء','أجزاء'],surah:['سورة','سور'],hizb:['حزب','أحزاب'],rub:['ربع','أرباع'],min:['دقيقة','دقائق'],rec:['تسجيل','تسجيلات'],seg:['مقطع','مقاطع'],day:['يوم','أيام']};
+const UNIT_TABS=[['page','صفحات'],['ayah','آيات'],['juz','أجزاء'],['surah','سور'],['rub','أرباع'],['hizb','أحزاب']];
+const MAX_HIZB=60, MAX_RUB=240;
+const RANGE_UNITS={page:MAX_PAGE,juz:MAX_JUZ,surah:114,hizb:MAX_HIZB,rub:MAX_RUB};
+const rubDesc=n=>`الربع ${(n-1)%4+1} من الحزب ${Math.ceil(n/4)}`;
+const sName=n=>SURAHS[n-1]?SURAHS[n-1].name:'';
 const MASTERY={mutqan:'متقن',jayyid:'جيد',weak:'يحتاج تثبيتا'};
 
 const uw=(n,u)=>(Number.isInteger(n)&&n>=3&&n<=10)?UNITS[u][1]:UNITS[u][0];
@@ -442,30 +446,36 @@ function locText(e){
     if(s)t=t?`${s} · ${t}`:`سورة ${s}`;return t;
   }
   if(e.unit==='juz'&&e.from&&e.to)return e.from===e.to?`الجزء ${e.from}`:`الأجزاء ${e.from}–${e.to}`;
+  if(e.unit==='surah'&&e.from&&e.to)return e.from===e.to?`سورة ${sName(e.from)}`:`من سورة ${sName(e.from)} إلى سورة ${sName(e.to)}`;
+  if(e.unit==='hizb'&&e.from&&e.to)return e.from===e.to?`الحزب ${e.from}`:`الأحزاب ${e.from}–${e.to}`;
+  if(e.unit==='rub'&&e.from&&e.to)return e.from===e.to?rubDesc(e.from):`من ${rubDesc(e.from)} إلى ${rubDesc(e.to)}`;
   return s?`سورة ${s}`:'';
 }
 function locKey(e){
   if(e.unit==='ayah'&&e.surah&&e.from&&e.to)return `a|${e.surah}|${e.from}|${e.to}`;
   if(e.unit==='page'&&e.from&&e.to)return `p|${e.from}|${e.to}`;
   if(e.unit==='juz'&&e.from&&e.to)return `j|${e.from}|${e.to}`;
+  if(e.unit==='surah'&&e.from&&e.to)return `s|${e.from}|${e.to}`;
+  if(e.unit==='hizb'&&e.from&&e.to)return `h|${e.from}|${e.to}`;
+  if(e.unit==='rub'&&e.from&&e.to)return `r|${e.from}|${e.to}`;
   return null;
 }
 function keyLabel(k){
   const p=k.split('|');
   if(p[0]==='a')return locText({unit:'ayah',surah:+p[1],from:+p[2],to:+p[3]});
-  if(p[0]==='p')return locText({unit:'page',from:+p[1],to:+p[2]});
-  return locText({unit:'juz',from:+p[1],to:+p[2]});
+  return locText(keyToLoc(k));
 }
-function keyToLoc(k){const p=k.split('|');if(p[0]==='a')return{unit:'ayah',surah:+p[1],from:+p[2],to:+p[3]};return{unit:p[0]==='p'?'page':'juz',from:+p[1],to:+p[2]};}
+const KEY_UNIT={p:'page',j:'juz',s:'surah',h:'hizb',r:'rub'};
+function keyToLoc(k){const p=k.split('|');if(p[0]==='a')return{unit:'ayah',surah:+p[1],from:+p[2],to:+p[3]};return{unit:KEY_UNIT[p[0]]||'page',from:+p[1],to:+p[2]};}
 function cleanupSegments(){const keys=new Set(S.entries.map(locKey).filter(Boolean));S.segments=S.segments.filter(s=>keys.has(s.key));}
 const openSegs=()=>S.segments.filter(s=>s.status==='open');
 
 function totals(list){
-  const t={};ACT_KEYS.forEach(k=>t[k]={ayah:0,page:0,juz:0,min:0,count:0});
+  const t={};ACT_KEYS.forEach(k=>t[k]={ayah:0,page:0,juz:0,surah:0,hizb:0,rub:0,min:0,count:0});
   list.forEach(e=>{const x=t[e.act];if(!x)return;x.count++;if(e.minutes>0)x.min+=e.minutes;if(UNITS[e.unit]&&e.amount>0)x[e.unit]+=e.amount;});
   return t;
 }
-function parts(x,act){const order=act==='istima'?['min','page','ayah','juz']:['page','ayah','juz','min'];return order.filter(u=>x[u]>0).map(u=>({n:x[u],u}));}
+function parts(x,act){const U=['page','ayah','juz','hizb','rub','surah'];const order=act==='istima'?['min'].concat(U):U.concat(['min']);return order.filter(u=>x[u]>0).map(u=>({n:x[u],u}));}
 function totalText(x,act){const p=parts(x,act);if(!p.length)return x.count?cnt(x.count,'rec'):'—';return p.map(q=>cnt(q.n,q.u)).join(' + ');}
 
 function entryHTML(e,showDate){
@@ -549,7 +559,8 @@ function renderStats(){
     const ay=new Set(),pg=new Set();
     S.entries.forEach(e=>{if(e.act!=='hifz'||!e.from||!e.to)return;
       if(e.unit==='ayah'&&e.surah)for(let a=e.from;a<=e.to;a++)ay.add(e.surah+':'+a);
-      if(e.unit==='page')for(let p=e.from;p<=e.to;p++)pg.add(p);});
+      if(e.unit==='page')for(let p=e.from;p<=e.to;p++)pg.add(p);
+      if(e.unit==='surah')for(let n=Math.min(e.from,e.to);n<=Math.max(e.from,e.to);n++)for(let a=1;a<=SURAHS[n-1].ayat;a++)ay.add(n+':'+a);});
     if(ay.size||pg.size)h+=`<div class="method"><b>تغطية الحفظ الجديد</b> (من التسجيلات المحددة الموضع، دون تكرار): ${[ay.size?cnt(ay.size,'ayah')+' مختلفة':'',pg.size?`${cnt(pg.size,'page')} مختلفة من ${MAX_PAGE}`:''].filter(Boolean).join(' · ')}</div>`;
   }
   h+=`<div class="method">كل نشاط يُحسب مستقلا بوحداته، دون تحويل بين الآيات والصفحات. وتكرار المقطع في أيام مختلفة يُعدّ مراجعات متعددة، لا زيادة في مقدار المحفوظ. الأرقام تعكس ما أدخلتَه بنفسك.</div>`;
@@ -640,6 +651,10 @@ function drawForm(){
   let loc='';
   if(F.unit==='ayah')loc=`<div class="f-grid"><div class="full"><label class="lbl" for="fSurah">السورة</label>${surahSel}</div><div><label class="lbl" for="fFrom">من آية</label>${num('fFrom',F.from,1,F.surah?SURAHS[F.surah-1].ayat:286)}</div><div><label class="lbl" for="fTo">إلى آية</label>${num('fTo',F.to,1,F.surah?SURAHS[F.surah-1].ayat:286)}</div></div>`;
   else if(F.unit==='page')loc=`<div class="f-grid"><div><label class="lbl" for="fFrom">من صفحة</label>${num('fFrom',F.from,1,MAX_PAGE)}</div><div><label class="lbl" for="fTo">إلى صفحة</label>${num('fTo',F.to,1,MAX_PAGE)}</div><div class="full"><label class="lbl" for="fSurah">السورة <small>(اختياري)</small></label>${surahSel}</div></div><p class="hint">ترقيم الصفحات بحسب مصحف المدينة النبوية (${MAX_PAGE} صفحة).</p>`;
+  else if(F.unit==='surah'){const sel=(id,v)=>`<select class="inp" id="${id}"><option value="">— اختر —</option>${SURAHS.map(s=>`<option value="${s.n}" ${v===s.n?'selected':''}>${s.n}. ${s.name}</option>`).join('')}</select>`;
+    loc=`<div class="f-grid"><div><label class="lbl" for="fFrom">من سورة</label>${sel('fFrom',F.from)}</div><div><label class="lbl" for="fTo">إلى سورة</label>${sel('fTo',F.to)}</div></div><p class="hint">لسورة واحدة اختر السورة نفسها في الخانتين. ويصح النطاق تنازليا، مثل: من الناس إلى النبأ.</p>`;}
+  else if(F.unit==='hizb')loc=`<div class="f-grid"><div><label class="lbl" for="fFrom">من حزب</label>${num('fFrom',F.from,1,MAX_HIZB)}</div><div><label class="lbl" for="fTo">إلى حزب</label>${num('fTo',F.to,1,MAX_HIZB)}</div></div><p class="hint">أحزاب المصحف ${MAX_HIZB} حزبا، في كل جزء حزبان.</p>`;
+  else if(F.unit==='rub')loc=`<div class="f-grid"><div><label class="lbl" for="fFrom">من ربع</label>${num('fFrom',F.from,1,MAX_RUB)}</div><div><label class="lbl" for="fTo">إلى ربع</label>${num('fTo',F.to,1,MAX_RUB)}</div></div><p class="hint" id="fRubHint">${rubHint()}</p>`;
   else if(F.unit==='juz')loc=`<div class="f-grid"><div><label class="lbl" for="fFrom">من جزء</label>${num('fFrom',F.from,1,MAX_JUZ)}</div><div><label class="lbl" for="fTo">إلى جزء</label>${num('fTo',F.to,1,MAX_JUZ)}</div></div>`;
   const ranged=rangeAmount()!=null;
   openSheet(`${sheetHead(F.id?'تعديل الإنجاز':'تسجيل إنجاز جديد')}
@@ -656,8 +671,15 @@ function drawForm(){
   bindForm();
 }
 const intOrNull=v=>{if(v===''||v==null)return null;const n=Number(v);return Number.isFinite(n)?n:NaN;};
+function rubHint(){
+  const ok=n=>Number.isInteger(n)&&n>=1&&n<=MAX_RUB;
+  if(ok(F.from)&&ok(F.to))return F.from===F.to?`= ${rubDesc(F.from)}`:`= من ${rubDesc(F.from)} إلى ${rubDesc(F.to)}`;
+  if(ok(F.from))return `= ${rubDesc(F.from)}`;
+  return `ترقيم الأرباع متصل من 1 إلى ${MAX_RUB} (أربعة أرباع في كل حزب)؛ فالربع 17 هو أول الحزب 5.`;
+}
 function rangeAmount(){
   const f=F.from,t=F.to;
+  if(F.unit==='surah'){if(!Number.isInteger(f)||!Number.isInteger(t)||f<1||t<1)return null;return Math.abs(t-f)+1;}
   if(!Number.isInteger(f)||!Number.isInteger(t)||f<1||t<f)return null;
   if(F.unit==='ayah'&&!F.surah)return null;
   return t-f+1;
@@ -683,7 +705,8 @@ function bindForm(){
   const upd=()=>{readForm();const a=rangeAmount(),amt=$('#fAmt');if(!amt)return;
     if(a!=null){amt.value=a;F.amount=a;amt.readOnly=true;$('#fAmtHint').textContent='يُحسب تلقائيا من النطاق المحدد.';}
     else{amt.readOnly=false;$('#fAmtHint').textContent='اكتب المقدار، أو حدد النطاق ليُحسب تلقائيا. يمكن إدخال كسور مثل 0.5.';}};
-  ['fFrom','fTo'].forEach(id=>{const el=$('#'+id);if(el)el.addEventListener('input',upd);});
+  ['fFrom','fTo'].forEach(id=>{const el=$('#'+id);if(el){el.addEventListener('input',upd);el.addEventListener('change',upd);}});
+  if(F.unit==='rub')['fFrom','fTo'].forEach(id=>$('#'+id).addEventListener('input',()=>{const h=$('#fRubHint');if(h)h.textContent=rubHint();}));
   const ss=$('#fSurah');if(ss)ss.addEventListener('change',()=>{upd();if(F.unit==='ayah'){const mx=F.surah?SURAHS[F.surah-1].ayat:286;['fFrom','fTo'].forEach(id=>$('#'+id).max=mx);}});
   $('#fSave').onclick=submitForm;
   const d=$('#fDel');if(d)d.onclick=()=>deleteEntry(F.id,true);
@@ -698,17 +721,20 @@ function validate(){
     if(hasF||hasT){
       if(!(hasF&&hasT))return 'أكمل بداية النطاق ونهايته، أو اتركهما فارغين.';
       if(!Number.isInteger(F.from)||!Number.isInteger(F.to)||F.from<1)return 'بداية النطاق ونهايته يجب أن تكونا أعدادا صحيحة موجبة.';
-      if(F.to<F.from)return 'نهاية النطاق يجب ألا تكون قبل بدايته.';
+      if(F.unit!=='surah'&&F.to<F.from)return 'نهاية النطاق يجب ألا تكون قبل بدايته.';
       if(F.unit==='ayah'){if(!F.surah)return 'اختر السورة لتحديد نطاق الآيات.';const mx=SURAHS[F.surah-1].ayat;if(F.to>mx)return `سورة ${SURAHS[F.surah-1].name} عدد آياتها ${mx}.`;}
       if(F.unit==='page'&&F.to>MAX_PAGE)return `أرقام الصفحات من 1 إلى ${MAX_PAGE}.`;
       if(F.unit==='juz'&&F.to>MAX_JUZ)return `أرقام الأجزاء من 1 إلى ${MAX_JUZ}.`;
+      if(F.unit==='surah'&&Math.max(F.from,F.to)>114)return 'اختر السورتين من القائمة.';
+      if(F.unit==='hizb'&&F.to>MAX_HIZB)return `أرقام الأحزاب من 1 إلى ${MAX_HIZB}.`;
+      if(F.unit==='rub'&&F.to>MAX_RUB)return `أرقام الأرباع من 1 إلى ${MAX_RUB}.`;
     }
     const a=rangeAmount();if(a!=null)F.amount=a;
   }
   if(F.act==='istima'){
     if(!(F.minutes>0)&&!(F.unit!=='none'&&F.amount>0))return 'اكتب مدة الاستماع بالدقائق، أو مقدار ما استمعت إليه.';
   }else if(!(F.amount>0))return 'اكتب المقدار المنجز (أكبر من صفر).';
-  if(F.mastery==='weak'&&!locKey(F))return 'لإضافة المقطع إلى قائمة التثبيت حدد موضعه: السورة ونطاق الآيات، أو نطاق الصفحات، أو الأجزاء.';
+  if(F.mastery==='weak'&&!locKey(F))return 'لإضافة المقطع إلى قائمة التثبيت حدد موضعه: نطاق الآيات أو الصفحات أو السور أو الأجزاء أو الأحزاب أو الأرباع.';
   return null;
 }
 async function submitForm(){
@@ -717,7 +743,7 @@ async function submitForm(){
   if(err){$('#fErr').textContent=err;$('#fErr').scrollIntoView({block:'nearest',behavior:'smooth'});return;}
   const e={id:F.id||uid(),date:F.date,act:F.act,unit:F.unit,
     amount:F.unit==='none'?0:(F.amount||0),minutes:F.act==='istima'?(F.minutes||0):0,
-    surah:F.unit==='juz'||F.unit==='none'?null:F.surah,from:F.unit==='none'?null:F.from,to:F.unit==='none'?null:F.to,
+    surah:(F.unit==='ayah'||F.unit==='page')?F.surah:null,from:F.unit==='none'?null:F.from,to:F.unit==='none'?null:F.to,
     mastery:ACTS[F.act].mastery?F.mastery:null,note:F.note.slice(0,1000),createdAt:F.createdAt||Date.now()};
   if(F.id){e.updatedAt=Date.now();const i=S.entries.findIndex(x=>x.id===F.id);if(i>=0)S.entries[i]=e;else S.entries.push(e);}
   else S.entries.push(e);
@@ -756,11 +782,12 @@ function cleanEntry(e){
   if(!ACTS[e.act])return null;
   const num=v=>typeof v==='number'&&isFinite(v)&&v>=0?v:0;
   const pos=v=>Number.isInteger(v)&&v>0?v:null;
-  const r={id:e.id,date:e.date,act:e.act,unit:['ayah','page','juz','none'].includes(e.unit)?e.unit:'none',
+  const r={id:e.id,date:e.date,act:e.act,unit:['ayah','page','juz','surah','hizb','rub','none'].includes(e.unit)?e.unit:'none',
     amount:num(e.amount),minutes:num(e.minutes),surah:pos(e.surah)&&e.surah<=114?e.surah:null,from:pos(e.from),to:pos(e.to),
     mastery:MASTERY[e.mastery]&&ACTS[e.act].mastery?e.mastery:null,note:typeof e.note==='string'?e.note.slice(0,1000):'',
     createdAt:typeof e.createdAt==='number'?e.createdAt:Date.now()};
-  if(r.from&&r.to&&r.to<r.from)r.from=r.to=null;
+  if(r.from&&r.to&&r.to<r.from&&r.unit!=='surah')r.from=r.to=null;
+  const lim=RANGE_UNITS[r.unit];if(lim&&((r.from&&r.from>lim)||(r.to&&r.to>lim)))r.from=r.to=null;
   if(typeof e.updatedAt==='number')r.updatedAt=e.updatedAt;
   return r;
 }
@@ -770,7 +797,7 @@ function parseBackup(txt){
   if(typeof o.version!=='number'||o.version>1)return{err:'أُنشئ هذا الملف بإصدار أحدث من الصفحة أو إصدار غير معروف.'};
   const entries=[],seen=new Set();let bad=0;
   o.entries.forEach(x=>{const c=cleanEntry(x);if(c&&!seen.has(c.id)){seen.add(c.id);entries.push(c);}else bad++;});
-  const segments=(Array.isArray(o.segments)?o.segments:[]).filter(s=>s&&typeof s.key==='string'&&/^[apj](\|\d+){2,3}$/.test(s.key)).map(s=>({key:s.key,status:s.status==='resolved'?'resolved':'open',createdAt:typeof s.createdAt==='number'?s.createdAt:Date.now()}));
+  const segments=(Array.isArray(o.segments)?o.segments:[]).filter(s=>s&&typeof s.key==='string'&&/^[apjshr](\|\d+){2,3}$/.test(s.key)).map(s=>({key:s.key,status:s.status==='resolved'?'resolved':'open',createdAt:typeof s.createdAt==='number'?s.createdAt:Date.now()}));
   return{entries,segments,bad,exportedAt:o.exportedAt};
 }
 function openImport(){
@@ -817,7 +844,7 @@ function openMore(){
   <div class="btns"><button class="btn danger" id="wipeBtn">${icon('trash')}حذف جميع البيانات من هذا الجهاز</button></div>
   <h4 class="sub">إضافة الصفحة إلى الشاشة الرئيسية</h4>
   <ul class="info"><li>آيفون (Safari): زر المشاركة ← «إضافة إلى الشاشة الرئيسية».</li><li>أندرويد (Chrome): القائمة ⋮ ← «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».</li></ul>
-  <p class="hint">الإصدار 0.2.0 · إعداد: جعفر النقبي</p>`);
+  <p class="hint">الإصدار 0.3.0 · إعداد: جعفر النقبي</p>`);
   $('#wipeBtn').onclick=async()=>{
     if(!S.entries.length){toast('لا توجد بيانات');return;}
     if(!await ask(`سيُحذف ${cnt(S.entries.length,'rec')} وكل الملاحظات وقائمة التثبيت من هذا الجهاز. يُنصح بالتصدير أولا. هل تريد الحذف؟`,'حذف الكل'))return;
