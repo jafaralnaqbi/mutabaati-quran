@@ -61,18 +61,20 @@ svg{flex:none}
 .today-btn{font-size:14px;font-weight:700;color:var(--g);padding:6px 10px;border-radius:10px;background:var(--g3)}
 
 /* Main CTA */
-.cta{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:10px;padding:8px 12px;border-radius:14px;
-  background:linear-gradient(180deg,#2c8753,#1c5f37);color:#fff;font-size:16.5px;font-weight:800;box-shadow:0 4px 12px #1f6b3f33,inset 0 1px 0 #ffffff30}
+.cta{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin-top:12px;padding:15px 16px;border-radius:var(--r);
+  background:#dff1e4;border:1.5px solid #b9dcc4;color:var(--g);font-size:21px;font-weight:800;box-shadow:0 2px 8px #1f6b3f14}
 .cta svg{width:20px;height:20px}
 .cta:active{transform:translateY(1px)}
 
-.xlink{display:flex;align-items:center;gap:10px;margin-top:8px;padding:7px 12px;border-radius:14px;text-decoration:none;color:inherit}
-.xlink .xi{width:30px;height:30px;border-radius:9px;background:var(--g3);color:var(--g);display:grid;place-items:center;flex:none}
-.xlink .xi svg{width:19px;height:19px}
-.xlink .xt{flex:1;min-width:0}
-.xlink b{display:block;font-size:15px;line-height:1.3;color:var(--g)}
-.xlink small{display:block;font-size:12px;line-height:1.3;color:var(--muted)}
-.xlink .xc{width:18px;height:18px;color:var(--g)}
+.xlinks{display:flex;justify-content:center;gap:12px;margin-top:12px}
+.xlink{width:150px;aspect-ratio:1/1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:10px;border-radius:14px;text-decoration:none;color:inherit;text-align:center}
+.xlink:active{transform:translateY(1px)}
+.xlink .xi{width:38px;height:38px;border-radius:11px;background:var(--g3);color:var(--g);display:grid;place-items:center;flex:none}
+.xlink .xi svg{width:20px;height:20px}
+.xlink .xt{display:flex;flex-direction:column;gap:2px}
+.xlink b{display:block;font-size:16px;line-height:1.3;color:var(--g)}
+.xlink small{display:block;font-size:11.5px;line-height:1.35;color:var(--muted)}
+.xlink .xc{display:none}
 .acts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:8px;margin-top:10px}
 .act{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:92px;padding:12px 4px;background:var(--soft);border:1px solid var(--line);border-radius:14px;font-weight:800;font-size:15.5px;line-height:1.3;text-align:center}
 .act svg{width:32px;height:32px;color:var(--c)}
@@ -88,13 +90,7 @@ svg{flex:none}
 .acc.open .acc-head .chev{transform:rotate(90deg)}
 .acc-body{display:none;padding:2px 12px 14px}
 .acc.open .acc-body{display:block}
-.acc.today .acc-head{background:linear-gradient(180deg,#2c8753,#1c5f37);color:#fff}
-.acc.today .acc-head .ic,.acc.today .acc-head .chev{color:#fff}
-.acc.today .acc-head .ic{background:#ffffff26;border-radius:9px;padding:3px}
 .acc.today.open .acc-body{padding-top:10px}
-.acc.today .acc-head{padding:10px 14px;font-size:17px;gap:10px}
-.acc.today .acc-head .ic{width:24px;height:24px}
-.acc.today .acc-head .chev{width:20px;height:20px}
 .badge{font-size:14px;font-weight:700;padding:4px 12px;border-radius:10px;white-space:nowrap}
 .badge.red{background:var(--redbg);color:var(--red)}
 .badge.amber{background:#fff1d6;color:#8a5800}
@@ -265,6 +261,7 @@ textarea.json{direction:ltr;text-align:left;font-family:ui-monospace,Menlo,monos
 
   <button class="cta" id="ctaBtn"><span>تسجيل إنجاز جديد</span><span id="ctaIc"></span></button>
 
+  <div class="xlinks">
   <a class="card xlink" href="https://jafaralnaqbi.github.io/umruhu/" rel="noopener">
     <span class="xi"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M18 8h28M18 56h28"/><path d="M21 8c0 12 9 16 11 24-2 8-11 12-11 24h22c0-12-9-16-11-24 2-8 11-12 11-24"/><path d="M26 50c2-4 4-6 6-7 2 1 4 3 6 7z" fill="currentColor" stroke="none"/></svg></span>
     <span class="xt"><b>عمره فيما أفناه</b><small>محاسبة النفس ومتابعة العبادات والعادات</small></span>
@@ -276,6 +273,7 @@ textarea.json{direction:ltr;text-align:left;font-family:ui-monospace,Menlo,monos
     <span class="xt"><b style="color:#7b3fa0">الأذكار اليومية 100</b><small>أذكار يومية بعدّاد المئة</small></span>
     <svg class="xc" style="color:#7b3fa0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
   </a>
+  </div>
 
   <section class="card acc today" data-acc="today">
     <div class="acc-head" role="button" tabindex="0"><span id="todayIc"></span><span class="ttl" id="todayTitle">إنجاز اليوم</span><span class="chevw"></span></div>
@@ -846,7 +844,7 @@ function openMore(){
   <div class="btns"><button class="btn danger" id="wipeBtn">${icon('trash')}حذف جميع البيانات من هذا الجهاز</button></div>
   <h4 class="sub">إضافة الصفحة إلى الشاشة الرئيسية</h4>
   <ul class="info"><li>آيفون (Safari): زر المشاركة ← «إضافة إلى الشاشة الرئيسية».</li><li>أندرويد (Chrome): القائمة ⋮ ← «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».</li></ul>
-  <p class="hint">الإصدار 0.4.0 · إعداد: جعفر النقبي</p>`);
+  <p class="hint">الإصدار 0.4.1 · إعداد: جعفر النقبي</p>`);
   $('#wipeBtn').onclick=async()=>{
     if(!S.entries.length){toast('لا توجد بيانات');return;}
     if(!await ask(`سيُحذف ${cnt(S.entries.length,'rec')} وكل الملاحظات وقائمة التثبيت من هذا الجهاز. يُنصح بالتصدير أولا. هل تريد الحذف؟`,'حذف الكل'))return;
