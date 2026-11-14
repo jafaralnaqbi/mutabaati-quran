@@ -1,5 +1,5 @@
 /* متابعتي مع القرآن — service worker: offline app shell */
-const VERSION = 'v0.4.1';
+const VERSION = 'v0.4.2';
 const SHELL = 'shell-' + VERSION;
 const FONTS = 'fonts-v1';
 const ASSETS = [
